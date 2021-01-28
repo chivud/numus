@@ -46,10 +46,14 @@ class _CategoriesListWidgetState extends State<CategoriesListWidget> {
     return Container(
       child: ListView(
         children: categories
-            .map((Category category) => ListTile(
-                  leading: Icon(Icons.car_rental),
-                  title: Text(category.name),
-                ))
+            .map((Category category) =>
+            ListTile(
+              leading: Icon(Icons.car_rental),
+              title: Text(category.name),
+              onTap: () {
+
+              },
+            ))
             .toList(),
       ),
     );
