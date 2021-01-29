@@ -1,5 +1,4 @@
-import 'package:experiment/ui/entities/category.dart';
-import 'package:experiment/ui/entities/category_type.dart';
+import 'package:experiment/entities/category.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 

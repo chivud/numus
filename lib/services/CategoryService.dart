@@ -1,7 +1,8 @@
-import 'package:experiment/ui/entities/category.dart';
-import 'package:experiment/ui/entities/category_type.dart';
-import 'package:experiment/ui/services/DatabaseProvider.dart';
+import 'package:experiment/entities/category.dart';
+import 'package:experiment/entities/category_type.dart';
 import 'package:sqflite/sqflite.dart';
+
+import 'DatabaseProvider.dart';
 
 class CategoryService {
   Future<List<Category>> getByType(CategoryType type) async {

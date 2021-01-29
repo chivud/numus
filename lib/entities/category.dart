@@ -1,4 +1,4 @@
-import 'package:experiment/ui/entities/category_type.dart';
+import 'category_type.dart';
 
 class Category {
   int id;

@@ -1,6 +1,7 @@
-import 'package:experiment/ui/entities/category.dart';
-import 'package:experiment/ui/entities/category_type.dart';
-import 'package:experiment/ui/services/CategoryService.dart';
+import 'package:experiment/entities/category.dart';
+import 'package:experiment/entities/category_type.dart';
+import 'package:experiment/services/CategoryService.dart';
+import 'package:experiment/ui/transactions/add_amount.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -53,7 +54,10 @@ class _CategoriesListWidgetState extends State<CategoriesListWidget> {
                 .map<Widget>((Category category) => ListTile(
                       leading: Icon(Icons.car_rental),
                       title: Text(category.name),
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => AddAmountScreen(category: category)));
+                      },
                     ))
                 .toList();
           } else {

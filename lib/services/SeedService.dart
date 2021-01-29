@@ -1,5 +1,5 @@
-import 'package:experiment/ui/entities/category.dart';
-import 'package:experiment/ui/entities/category_type.dart';
+import 'package:experiment/entities/category.dart';
+import 'package:experiment/entities/category_type.dart';
 
 class SeedService {
   List<Category> getCategoriesSeed() {

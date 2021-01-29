@@ -1,6 +1,5 @@
+import 'package:experiment/services/DatabaseProvider.dart';
 import 'package:experiment/ui/home/home_screen.dart';
-import 'package:experiment/ui/services/DatabaseProvider.dart';
-import 'package:experiment/ui/services/SeedService.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
