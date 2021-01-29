@@ -8,6 +8,6 @@ class Category {
   Category({this.id, this.name, this.type});
 
   Map<String, dynamic> toMap() {
-    return {'name': name, 'type_id': type.id};
+    return {'name': name, 'type': type.tag};
   }
 }

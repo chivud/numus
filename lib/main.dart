@@ -8,8 +8,6 @@ void main() async {
   // Importing 'package:flutter/widgets.dart' is required.
   WidgetsFlutterBinding.ensureInitialized();
   await DatabaseProvider().database;
-  // TODO: seed only if necessary
-  SeedService().seedDb();
   runApp(MyApp());
 }
 
