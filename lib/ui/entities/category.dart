@@ -1,9 +1,13 @@
 import 'package:experiment/ui/entities/category_type.dart';
 
-class Category{
-  final int id;
-  final String name;
-  final CategoryType type;
+class Category {
+  int id;
+  String name;
+  CategoryType type;
 
-  Category(this.id, this.name, this.type);
+  Category({this.id, this.name, this.type});
+
+  Map<String, dynamic> toMap() {
+    return {'name': name, 'type_id': type.id};
+  }
 }
