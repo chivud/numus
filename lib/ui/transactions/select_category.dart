@@ -40,7 +40,10 @@ class CategoriesListWidget extends StatefulWidget {
   _CategoriesListWidgetState createState() => _CategoriesListWidgetState();
 }
 
-class _CategoriesListWidgetState extends State<CategoriesListWidget> {
+class _CategoriesListWidgetState extends State<CategoriesListWidget> with AutomaticKeepAliveClientMixin{
+  @override
+  bool get wantKeepAlive => true;
+
   @override
   Widget build(BuildContext context) {
     Future categories = CategoryService().getByType(widget.type);
