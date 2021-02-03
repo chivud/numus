@@ -1,4 +1,7 @@
 import 'package:experiment/entities/category.dart';
+import 'package:experiment/entities/operation.dart';
+import 'package:experiment/services/OperationsService.dart';
+import 'package:experiment/ui/home/home_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -13,13 +16,17 @@ class AddAmountScreen extends StatelessWidget {
       appBar: AppBar(title: Text('Add ${category.name} amount')),
       body: Container(
         // padding: EdgeInsets.all(10),
-        child: AmountWidget(),
+        child: AmountWidget(category),
       ),
     );
   }
 }
 
 class AmountWidget extends StatefulWidget {
+  final Category category;
+
+  AmountWidget(this.category);
+
   @override
   _AmountWidgetState createState() => _AmountWidgetState();
 }
@@ -27,11 +34,15 @@ class AmountWidget extends StatefulWidget {
 class _AmountWidgetState extends State<AmountWidget> {
   @override
   Widget build(BuildContext context) {
-    return CalculatorWidget();
+    return CalculatorWidget(widget.category);
   }
 }
 
 class CalculatorWidget extends StatefulWidget {
+  final Category category;
+
+  CalculatorWidget(this.category);
+
   @override
   _CalculatorWidgetState createState() => _CalculatorWidgetState();
 }
@@ -65,19 +76,35 @@ class _CalculatorWidgetState extends State<CalculatorWidget> {
   }
 
   void onBackspacePress() {
-    if(value.length > 1){
+    if (value.length > 1) {
       setState(() {
         value = value.substring(0, value.length - 1);
       });
-    }else{
+    } else {
       setState(() {
         value = '0';
       });
     }
-
   }
 
-  void onDonePress() {}
+  void onDonePress() {
+    if (value == '0') {
+      Scaffold.of(context)
+          .showSnackBar(SnackBar(content: Text('The ammount cannot be 0')));
+      return;
+    }
+
+    Operation operation = Operation(
+        amount: double.parse(value),
+        category: widget.category,
+        createdAt: DateTime.now().millisecondsSinceEpoch);
+
+    OperationsService().persistOperation(operation).then((value) =>
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => HomeScreen()),
+            (Route<dynamic> route) => false));
+  }
 
   @override
   Widget build(BuildContext context) {

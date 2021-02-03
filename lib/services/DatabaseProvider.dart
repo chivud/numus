@@ -27,6 +27,15 @@ class DatabaseProvider {
             "type TEXT"
             ")",
       );
+      db.execute(
+        "CREATE TABLE operations("
+            "id INTEGER PRIMARY KEY, "
+            "category_id INTEGER, "
+            "amount REAL, "
+            "created_at INTEGER,"
+            "FOREIGN KEY(category_id) REFERENCES categories(id)"
+            ")"
+      );
       List<Category> categories = SeedService().getCategoriesSeed();
       for (var category in categories){
         await db.insert('categories', category.toMap());
