@@ -11,7 +11,7 @@ class CategoryService {
         .query('categories', where: 'type = ?', whereArgs: [type.tag]);
     List<Category> categories = [];
     for (var item in result) {
-      categories.add(Category(id: item['id'], name: item['name'], type: type));
+      categories.add(Category(id: item['id'], name: item['name'], color: item['color'], icon: item['icon'], type: type));
     }
     return categories;
   }

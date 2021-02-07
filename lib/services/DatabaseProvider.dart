@@ -24,6 +24,8 @@ class DatabaseProvider {
         "CREATE TABLE categories("
             "id INTEGER PRIMARY KEY, "
             "name TEXT NOT NULL, "
+            "icon INTEGER NOT NULL, "
+            "color INTEGER NOT NULL, "
             "type TEXT"
             ")",
       );

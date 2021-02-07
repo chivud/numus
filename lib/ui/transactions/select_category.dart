@@ -2,8 +2,10 @@ import 'package:experiment/entities/category.dart';
 import 'package:experiment/entities/category_type.dart';
 import 'package:experiment/services/CategoryService.dart';
 import 'package:experiment/ui/transactions/add_amount.dart';
+import 'package:experiment/ui/transactions/add_category.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class SelectCategoryWidget extends StatelessWidget {
   @override
@@ -40,7 +42,8 @@ class CategoriesListWidget extends StatefulWidget {
   _CategoriesListWidgetState createState() => _CategoriesListWidgetState();
 }
 
-class _CategoriesListWidgetState extends State<CategoriesListWidget> with AutomaticKeepAliveClientMixin{
+class _CategoriesListWidgetState extends State<CategoriesListWidget>
+    with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
 
@@ -54,14 +57,29 @@ class _CategoriesListWidgetState extends State<CategoriesListWidget> with Automa
           List<Widget> children = [];
           if (snapshot.hasData) {
             children = snapshot.data
-                .map<Widget>((Category category) => ListTile(
-                      leading: Icon(Icons.car_rental),
-                      title: Text(category.name),
-                      onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => AddAmountScreen(category: category)));
-                      },
-                    ))
+                .map<Widget>(
+                  (Category category) => ListTile(
+                    contentPadding: EdgeInsets.all(5),
+                    leading: Container(
+                      padding: EdgeInsets.all(7),
+                      decoration: BoxDecoration(
+                          color: Color(category.color), shape: BoxShape.circle),
+                      child: Icon(
+                        IconData(category.icon, fontFamily: 'MaterialIcons'),
+                        color: Colors.white,
+                        size: 30,
+                      ),
+                    ),
+                    title: Text(category.name),
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  AddAmountScreen(category: category)));
+                    },
+                  ),
+                )
                 .toList();
           } else {
             children.add(ListTile(
@@ -70,7 +88,18 @@ class _CategoriesListWidgetState extends State<CategoriesListWidget> with Automa
               onTap: () {},
             ));
           }
+          children.add(ListTile(
+            leading: Icon(Icons.add),
+            title: Text('Add category...'),
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => AddCategoryWidget(widget.type)));
+            },
+          ));
           return ListView(
+            padding: EdgeInsets.all(10),
             children: children,
           );
         },
