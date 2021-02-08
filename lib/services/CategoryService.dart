@@ -15,4 +15,10 @@ class CategoryService {
     }
     return categories;
   }
+
+  Future<void> createCategory(CategoryType type, String name, int icon, int color) async{
+    Category category = Category(name: name, icon: icon, color: color, type: type);
+    Database db = await DatabaseProvider().database;
+    return await db.insert('categories', category.toMap());
+  }
 }

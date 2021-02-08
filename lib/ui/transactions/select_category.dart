@@ -47,6 +47,10 @@ class _CategoriesListWidgetState extends State<CategoriesListWidget>
   @override
   bool get wantKeepAlive => true;
 
+  void refreshList() {
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     Future categories = CategoryService().getByType(widget.type);
@@ -91,11 +95,12 @@ class _CategoriesListWidgetState extends State<CategoriesListWidget>
           children.add(ListTile(
             leading: Icon(Icons.add),
             title: Text('Add category...'),
-            onTap: () {
-              Navigator.push(
+            onTap: () async {
+              await Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => AddCategoryWidget(widget.type)));
+              refreshList();
             },
           ));
           return ListView(
