@@ -1,3 +1,4 @@
+import 'package:experiment/constants/date.dart';
 import 'package:experiment/entities/category_type.dart';
 import 'package:experiment/entities/operation.dart';
 import 'package:experiment/services/OperationsService.dart';
@@ -31,7 +32,7 @@ class _TransactionListWidgetState extends State<TransactionListWidget> {
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 List<Widget> children = [];
                 if (snapshot.hasData) {
-                  final DateFormat formatter = DateFormat('d MMM @ h:ma');
+                  final DateFormat formatter = DateFormat(dateTimeFormat);
                   for (Operation operation in snapshot.data) {
                     children.add(
                       ListTile(

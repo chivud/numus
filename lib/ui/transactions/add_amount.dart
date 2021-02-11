@@ -1,9 +1,12 @@
+import 'package:experiment/constants/date.dart';
 import 'package:experiment/entities/category.dart';
 import 'package:experiment/entities/operation.dart';
 import 'package:experiment/services/OperationsService.dart';
 import 'package:experiment/ui/home/home_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
 
 class AddAmountScreen extends StatelessWidget {
   final Category category;
@@ -15,7 +18,6 @@ class AddAmountScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text('Add ${category.name} amount')),
       body: Container(
-        // padding: EdgeInsets.all(10),
         child: AmountWidget(category),
       ),
     );
@@ -49,6 +51,7 @@ class CalculatorWidget extends StatefulWidget {
 
 class _CalculatorWidgetState extends State<CalculatorWidget> {
   String value = '0';
+  DateTime selectedDate = DateTime.now();
 
   void onKeyPress(String character) {
     if (value.length > 10) {
@@ -97,13 +100,44 @@ class _CalculatorWidgetState extends State<CalculatorWidget> {
     Operation operation = Operation(
         amount: double.parse(value),
         category: widget.category,
-        createdAt: DateTime.now().millisecondsSinceEpoch);
+        createdAt: selectedDate.millisecondsSinceEpoch);
 
     OperationsService().persistOperation(operation).then((value) =>
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => HomeScreen()),
             (Route<dynamic> route) => false));
+  }
+
+  void showDateTimePicker() async {
+    DateTime date = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime(2019),
+      lastDate: DateTime(2025),
+    );
+    if (date != null) {
+      TimeOfDay time =
+          await showTimePicker(context: context, initialTime: TimeOfDay.now());
+      setSelectedDate(
+          DateTime(date.year, date.month, date.day, time.hour, time.minute));
+    }
+  }
+
+  void setSelectedDate(DateTime newDate) {
+    setState(() {
+      selectedDate = newDate;
+    });
+  }
+  
+  String formatDate(){
+    final DateFormat dateFormatter = DateFormat(dateFormat);
+    return dateFormatter.format(selectedDate);
+  }
+
+  String formatTime(){
+    final DateFormat timeFormatter = DateFormat(timeFormat);
+    return timeFormatter.format(selectedDate);
   }
 
   @override
@@ -214,9 +248,10 @@ class _CalculatorWidgetState extends State<CalculatorWidget> {
                       icon: Icon(Icons.backspace_outlined),
                       onPress: onBackspacePress,
                     ),
-                    CalculatorKey(
-                      character: 'AC',
-                      onPress: onKeyPress,
+                    DateKey(
+                      date: formatDate(),
+                      time: formatTime(),
+                      onPress: showDateTimePicker,
                     ),
                     CalculatorAction(
                       flex: 2,
@@ -250,7 +285,6 @@ class CalculatorKey extends StatelessWidget {
       child: Container(
         margin: EdgeInsets.all(5),
         child: OutlineButton(
-          // height: 80,
           child: Text(
             character,
             style: TextStyle(fontSize: 30),
@@ -258,6 +292,40 @@ class CalculatorKey extends StatelessWidget {
           onPressed: () {
             onPress(character);
           },
+        ),
+      ),
+    );
+  }
+}
+
+class DateKey extends StatelessWidget {
+  final Function onPress;
+
+  final String date;
+  final String time;
+
+  DateKey({this.date, this.time, this.onPress});
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Container(
+        margin: EdgeInsets.all(5),
+        child: OutlineButton(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                date,
+                style: TextStyle(fontSize: 18),
+              ),
+              Text(
+                time,
+                style: TextStyle(fontSize: 14),
+              ),
+            ],
+          ),
+          onPressed: onPress,
         ),
       ),
     );
@@ -282,7 +350,7 @@ class CalculatorAction extends StatelessWidget {
         child: OutlineButton(
           disabledBorderColor: Colors.green,
           child: icon,
-          onPressed: () => {onPress()},
+          onPressed: onPress,
         ),
       ),
     );
