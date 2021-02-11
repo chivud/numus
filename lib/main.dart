@@ -1,6 +1,7 @@
 import 'package:experiment/services/DatabaseProvider.dart';
 import 'package:experiment/ui/home/home_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void main() async {
   // Avoid errors caused by flutter upgrade.
@@ -13,6 +14,10 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    WidgetsFlutterBinding.ensureInitialized();
+    SystemChrome.setPreferredOrientations(
+        [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+
     return MaterialApp(
         title: 'Money manager',
         theme: ThemeData(
