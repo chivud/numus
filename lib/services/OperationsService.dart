@@ -11,20 +11,29 @@ class OperationsService {
     await db.insert('operations', operation.toMap());
   }
 
-  Future<double> getTotalBalance() async {
+  Future<Map<String, double>> getTotalBalance() async {
     Database db = await DatabaseProvider().database;
 
     List<Map> expenses =
         await db.rawQuery("SELECT TOTAL(amount) as sum FROM operations "
             "JOIN categories ON categories.id = operations.category_id "
-            "WHERE categories.type = 'expense' OR categories.type = 'savings'");
+            "WHERE categories.type = 'expense'");
     List<Map> income =
         await db.rawQuery("SELECT TOTAL(amount) as sum FROM operations "
             "JOIN categories ON categories.id = operations.category_id "
             "WHERE categories.type = 'income'");
+
+    List<Map> savings =
+        await db.rawQuery("SELECT TOTAL(amount) as sum FROM operations "
+            "JOIN categories ON categories.id = operations.category_id "
+            "WHERE categories.type = 'savings'");
     var incomeSum = income.first['sum'];
-    var expense = expenses.first['sum'];
-    return incomeSum - expense;
+    var expensesSum = expenses.first['sum'];
+    var savingsSum = savings.first['sum'];
+    return {
+      'balance': incomeSum - expensesSum - savingsSum,
+      'savings': savingsSum
+    };
   }
 
   Future<List<Operation>> getBetween() async {
