@@ -10,15 +10,16 @@ import 'package:intl/intl.dart';
 
 class AddAmountScreen extends StatelessWidget {
   final Category category;
+  final Operation operation;
 
-  AddAmountScreen({this.category});
+  AddAmountScreen({this.category, this.operation});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Add ${category.name} amount')),
       body: Container(
-        child: AmountWidget(category),
+        child: AmountWidget(category, operation: operation,),
       ),
     );
   }
@@ -26,8 +27,9 @@ class AddAmountScreen extends StatelessWidget {
 
 class AmountWidget extends StatefulWidget {
   final Category category;
+  final Operation operation;
 
-  AmountWidget(this.category);
+  AmountWidget(this.category, {this.operation});
 
   @override
   _AmountWidgetState createState() => _AmountWidgetState();
@@ -36,22 +38,32 @@ class AmountWidget extends StatefulWidget {
 class _AmountWidgetState extends State<AmountWidget> {
   @override
   Widget build(BuildContext context) {
-    return CalculatorWidget(widget.category);
+    return CalculatorWidget(widget.category, operation: widget.operation,);
   }
 }
 
 class CalculatorWidget extends StatefulWidget {
   final Category category;
+  final Operation operation;
 
-  CalculatorWidget(this.category);
+  CalculatorWidget(this.category, {this.operation});
 
   @override
   _CalculatorWidgetState createState() => _CalculatorWidgetState();
 }
 
 class _CalculatorWidgetState extends State<CalculatorWidget> {
-  String value = '0';
-  DateTime selectedDate = DateTime.now();
+  String value;
+  DateTime selectedDate;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedDate = widget.operation != null
+        ? DateTime.fromMillisecondsSinceEpoch(widget.operation.createdAt)
+        : DateTime.now();
+    value = widget.operation != null ? widget.operation.amount.toStringAsFixed(2) : '0';
+  }
 
   void onKeyPress(String character) {
     if (value.length > 10) {
@@ -90,23 +102,36 @@ class _CalculatorWidgetState extends State<CalculatorWidget> {
     }
   }
 
+  onBackspaceLongPress() {
+    setState(() {
+      value = '0';
+    });
+  }
+
   void onDonePress() {
     if (value == '0') {
       Scaffold.of(context)
           .showSnackBar(SnackBar(content: Text('The ammount cannot be 0')));
       return;
     }
+    if (widget.operation == null) {
+      Operation operation = Operation(
+          amount: double.parse(value),
+          category: widget.category,
+          createdAt: selectedDate.millisecondsSinceEpoch);
 
-    Operation operation = Operation(
-        amount: double.parse(value),
-        category: widget.category,
-        createdAt: selectedDate.millisecondsSinceEpoch);
-
-    OperationsService().persistOperation(operation).then((value) =>
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => HomeScreen()),
-            (Route<dynamic> route) => false));
+      OperationsService().persistOperation(operation).then((value) =>
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => HomeScreen()),
+              (Route<dynamic> route) => false));
+    } else {
+      widget.operation.amount = double.parse(value);
+      widget.operation.createdAt = selectedDate.millisecondsSinceEpoch;
+      OperationsService().update(widget.operation).then((value) {
+        Navigator.pop(context);
+      });
+    }
   }
 
   void showDateTimePicker() async {
@@ -129,13 +154,13 @@ class _CalculatorWidgetState extends State<CalculatorWidget> {
       selectedDate = newDate;
     });
   }
-  
-  String formatDate(){
+
+  String formatDate() {
     final DateFormat dateFormatter = DateFormat(dateFormat);
     return dateFormatter.format(selectedDate);
   }
 
-  String formatTime(){
+  String formatTime() {
     final DateFormat timeFormatter = DateFormat(timeFormat);
     return timeFormatter.format(selectedDate);
   }
@@ -247,6 +272,7 @@ class _CalculatorWidgetState extends State<CalculatorWidget> {
                     CalculatorAction(
                       icon: Icon(Icons.backspace_outlined),
                       onPress: onBackspacePress,
+                      onLongPress: onBackspaceLongPress,
                     ),
                     DateKey(
                       date: formatDate(),
@@ -334,12 +360,13 @@ class DateKey extends StatelessWidget {
 
 class CalculatorAction extends StatelessWidget {
   final Function onPress;
+  final Function onLongPress;
 
   final Icon icon;
 
   final int flex;
 
-  CalculatorAction({this.icon, this.onPress, this.flex = 1});
+  CalculatorAction({this.icon, this.onPress, this.onLongPress, this.flex: 1});
 
   @override
   Widget build(BuildContext context) {
@@ -351,6 +378,7 @@ class CalculatorAction extends StatelessWidget {
           disabledBorderColor: Colors.green,
           child: icon,
           onPressed: onPress,
+          onLongPress: onLongPress != null ? onLongPress : onPress,
         ),
       ),
     );

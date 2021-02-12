@@ -2,6 +2,7 @@ import 'package:experiment/constants/date.dart';
 import 'package:experiment/entities/category_type.dart';
 import 'package:experiment/entities/operation.dart';
 import 'package:experiment/services/OperationsService.dart';
+import 'package:experiment/ui/transactions/edit_transaction.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -60,6 +61,13 @@ class _TransactionListWidgetState extends State<TransactionListWidget> {
                                   ? Colors.green
                                   : Colors.red),
                         ),
+                        onTap: () async {
+                          await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => EditTransactionWidget(operation)));
+                          setState(() {});
+                        },
                       ),
                     );
                   }

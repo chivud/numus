@@ -1,6 +1,8 @@
 import 'package:experiment/entities/category.dart';
 import 'package:experiment/entities/category_type.dart';
+import 'package:experiment/entities/operation.dart';
 import 'package:experiment/services/CategoryService.dart';
+import 'package:experiment/services/OperationsService.dart';
 import 'package:experiment/ui/transactions/add_amount.dart';
 import 'package:experiment/ui/transactions/add_category.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,6 +10,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class SelectCategoryWidget extends StatelessWidget {
+  final Operation operation;
+
+  const SelectCategoryWidget({Key key, this.operation}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -24,9 +30,18 @@ class SelectCategoryWidget extends StatelessWidget {
           ),
         ),
         body: TabBarView(children: [
-          CategoriesListWidget(expenseType),
-          CategoriesListWidget(incomeType),
-          CategoriesListWidget(savingType),
+          CategoriesListWidget(
+            expenseType,
+            operation: operation,
+          ),
+          CategoriesListWidget(
+            incomeType,
+            operation: operation,
+          ),
+          CategoriesListWidget(
+            savingType,
+            operation: operation,
+          ),
         ]),
       ),
     );
@@ -35,8 +50,9 @@ class SelectCategoryWidget extends StatelessWidget {
 
 class CategoriesListWidget extends StatefulWidget {
   final CategoryType type;
+  final Operation operation;
 
-  CategoriesListWidget(this.type);
+  CategoriesListWidget(this.type, {this.operation});
 
   @override
   _CategoriesListWidgetState createState() => _CategoriesListWidgetState();
@@ -49,6 +65,20 @@ class _CategoriesListWidgetState extends State<CategoriesListWidget>
 
   void refreshList() {
     setState(() {});
+  }
+
+  void onSelectCategory(Category category) {
+    if (widget.operation == null) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => AddAmountScreen(category: category)));
+    } else {
+      widget.operation.category = category;
+      OperationsService().update(widget.operation).then((value) {
+        Navigator.pop(context);
+      });
+    }
   }
 
   @override
@@ -76,11 +106,7 @@ class _CategoriesListWidgetState extends State<CategoriesListWidget>
                     ),
                     title: Text(category.name),
                     onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  AddAmountScreen(category: category)));
+                      onSelectCategory(category);
                     },
                   ),
                 )

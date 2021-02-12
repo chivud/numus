@@ -46,7 +46,7 @@ class OperationsService {
         " FROM operations "
         "JOIN categories ON operations.category_id = categories.id "
         "WHERE operations.created_at BETWEEN ? AND ? "
-            "ORDER BY operations.created_at DESC",
+        "ORDER BY operations.created_at DESC",
         [
           firstDayOfMonth.millisecondsSinceEpoch,
           lastDayOfMonth.millisecondsSinceEpoch
@@ -74,5 +74,17 @@ class OperationsService {
       operations.add(operation);
     }
     return operations;
+  }
+
+  Future<int> removeOperation(Operation operation) async {
+    Database db = await DatabaseProvider().database;
+    return await db
+        .delete('operations', where: 'id = ?', whereArgs: [operation.id]);
+  }
+
+  Future<int> update(Operation operation) async {
+    Database db = await DatabaseProvider().database;
+    return await db.update('operations', operation.toMap(),
+        where: 'id = ?', whereArgs: [operation.id]);
   }
 }
