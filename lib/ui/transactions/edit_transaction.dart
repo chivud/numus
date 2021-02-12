@@ -132,13 +132,13 @@ class _EditTransactionWidgetState extends State<EditTransactionWidget> {
                 child: Icon(
                   Icons.attach_money,
                   color: Colors.black,
-                  size: 30,
+                  size: 24,
                 ),
               ),
               title: Text(
                 widget.operation.amount.toStringAsFixed(2) + ' lei',
                 style: TextStyle(
-                    fontSize: 30,
+                    fontSize: 24,
                     color: widget.operation.category.type == incomeType
                         ? Colors.green
                         : Colors.red),
@@ -158,12 +158,12 @@ class _EditTransactionWidgetState extends State<EditTransactionWidget> {
                   IconData(widget.operation.category.icon,
                       fontFamily: 'MaterialIcons'),
                   color: Colors.white,
-                  size: 30,
+                  size: 24,
                 ),
               ),
               title: Text(
                 widget.operation.category.name,
-                style: TextStyle(fontSize: 30),
+                style: TextStyle(fontSize: 24),
               ),
               trailing: Icon(Icons.edit),
               onTap: editCategory,
@@ -176,13 +176,13 @@ class _EditTransactionWidgetState extends State<EditTransactionWidget> {
                 child: Icon(
                   Icons.calendar_today_sharp,
                   color: Colors.black,
-                  size: 30,
+                  size: 24,
                 ),
               ),
               title: Text(
                 dateFormat.format(DateTime.fromMillisecondsSinceEpoch(
                     widget.operation.createdAt)),
-                style: TextStyle(fontSize: 30),
+                style: TextStyle(fontSize: 24),
               ),
               trailing: Icon(Icons.edit),
               onTap: editDate,
