@@ -18,14 +18,44 @@ class HomeScreen extends StatelessWidget {
               Flexible(flex: 3, child: TransactionListWidget()),
             ],
           )),
-      floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => SelectCategoryWidget()));
-          },
-          child: Icon(Icons.add)),
+      floatingActionButton: SizedBox(
+        height: 65,
+        width: 65,
+        child: FloatingActionButton(
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => SelectCategoryWidget()));
+            },
+            child: Icon(Icons.add)),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      bottomNavigationBar: BottomAppBar(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            FlatButton(
+              padding: EdgeInsets.all(10),
+              shape: CircleBorder(),
+              onPressed: () {},
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [Icon(Icons.bar_chart), Text('label')],
+              ),
+            ),
+            FlatButton(
+              padding: EdgeInsets.all(10),
+              shape: CircleBorder(),
+              onPressed: () {},
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [Icon(Icons.bar_chart), Text('label')],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
