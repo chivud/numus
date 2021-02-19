@@ -15,8 +15,8 @@ class HomeScreen extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Flexible(flex: 1, child: BalanceWidget()),
-              Flexible(flex: 3, child: TransactionListWidget()),
+              BalanceWidget(),
+              Expanded(child: TransactionListWidget(),)
             ],
           )),
       floatingActionButton: SizedBox(

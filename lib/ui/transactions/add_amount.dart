@@ -158,7 +158,7 @@ class _CalculatorWidgetState extends State<CalculatorWidget> {
         );
         return;
       }
-    } else {
+    } else if(widget.category.type == expenseType) {
       Map balance = await operationsService.getTotalBalance();
       double totalBalance = balance['balance'] + amountToAdd;
       if (totalBalance < parsedValue) {

@@ -29,7 +29,7 @@ class _TransactionListWidgetState extends State<TransactionListWidget> {
 
   @override
   Widget build(BuildContext context) {
-    Future future = OperationsService().getBetween();
+    Future<List<Operation>> future = OperationsService().getBetween();
     return Card(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -47,7 +47,7 @@ class _TransactionListWidgetState extends State<TransactionListWidget> {
               future: future,
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 List<Widget> children = [];
-                if (snapshot.hasData) {
+                if (snapshot.hasData && snapshot.data.isNotEmpty) {
                   final DateFormat formatter = DateFormat(dateTimeFormat);
                   for (Operation operation in snapshot.data) {
                     children.add(
