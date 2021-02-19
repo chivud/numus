@@ -1,3 +1,4 @@
+import 'package:experiment/constants/application.dart';
 import 'package:experiment/ui/home/balance.dart';
 import 'package:experiment/ui/home/transaction_list.dart';
 import 'package:experiment/ui/transactions/select_category.dart';
@@ -8,7 +9,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Money Manager')),
+      appBar: AppBar(title: Text(appName)),
       body: Container(
           padding: EdgeInsets.all(10),
           child: Column(
