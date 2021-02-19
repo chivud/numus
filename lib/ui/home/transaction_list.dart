@@ -12,6 +12,21 @@ class TransactionListWidget extends StatefulWidget {
 }
 
 class _TransactionListWidgetState extends State<TransactionListWidget> {
+  Color getAmountColor(Operation operation) {
+    return operation.category.type == incomeType ||
+            operation.category.type == withdrawType
+        ? Colors.green
+        : Colors.red;
+  }
+
+  void editTransaction(Operation operation) async {
+    await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => EditTransactionWidget(operation)));
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     Future future = OperationsService().getBetween();
@@ -57,18 +72,10 @@ class _TransactionListWidgetState extends State<TransactionListWidget> {
                           operation.amount.toStringAsFixed(2) + ' lei',
                           style: TextStyle(
                               fontWeight: FontWeight.normal,
-                              color: operation.category.type == incomeType ||
-                                      operation.category.type == withdrawType
-                                  ? Colors.green
-                                  : Colors.red),
+                              color: getAmountColor(operation)),
                         ),
-                        onTap: () async {
-                          await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      EditTransactionWidget(operation)));
-                          setState(() {});
+                        onTap: () {
+                          editTransaction(operation);
                         },
                       ),
                     );
