@@ -1,5 +1,6 @@
 import 'package:experiment/constants/date.dart';
 import 'package:experiment/entities/category.dart';
+import 'package:experiment/entities/category_type.dart';
 import 'package:experiment/entities/operation.dart';
 import 'package:experiment/services/OperationsService.dart';
 import 'package:experiment/ui/home/home_screen.dart';
@@ -16,10 +17,16 @@ class AddAmountScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String text = category.type != withdrawType
+        ? 'Add ${category.name} amount'
+        : category.name;
     return Scaffold(
-      appBar: AppBar(title: Text('Add ${category.name} amount')),
+      appBar: AppBar(title: Text(text)),
       body: Container(
-        child: AmountWidget(category, operation: operation,),
+        child: AmountWidget(
+          category,
+          operation: operation,
+        ),
       ),
     );
   }
@@ -38,7 +45,10 @@ class AmountWidget extends StatefulWidget {
 class _AmountWidgetState extends State<AmountWidget> {
   @override
   Widget build(BuildContext context) {
-    return CalculatorWidget(widget.category, operation: widget.operation,);
+    return CalculatorWidget(
+      widget.category,
+      operation: widget.operation,
+    );
   }
 }
 
@@ -62,7 +72,9 @@ class _CalculatorWidgetState extends State<CalculatorWidget> {
     selectedDate = widget.operation != null
         ? DateTime.fromMillisecondsSinceEpoch(widget.operation.createdAt)
         : DateTime.now();
-    value = widget.operation != null ? widget.operation.amount.toStringAsFixed(2) : '0';
+    value = widget.operation != null
+        ? widget.operation.amount.toStringAsFixed(2)
+        : '0';
   }
 
   void onKeyPress(String character) {
@@ -108,15 +120,69 @@ class _CalculatorWidgetState extends State<CalculatorWidget> {
     });
   }
 
-  void onDonePress() {
+  void onDonePress() async {
     if (value == '0') {
-      Scaffold.of(context)
-          .showSnackBar(SnackBar(content: Text('The ammount cannot be 0')));
+      Scaffold.of(context).showSnackBar(
+        SnackBar(
+          behavior: SnackBarBehavior.floating,
+          action: SnackBarAction(
+            label: 'OK',
+            onPressed: () {},
+          ),
+          duration: Duration(seconds: 10),
+          content: Text('The ammount cannot be 0'),
+        ),
+      );
       return;
     }
+    double parsedValue = double.parse(value);
+    OperationsService operationsService = OperationsService();
+    double amountToAdd = widget.operation != null ? widget.operation.amount : 0;
+    if (widget.category.type == withdrawType) {
+      Map balance = await operationsService.getTotalBalance();
+      double totalSavings = balance['savings'] + amountToAdd;
+      if (totalSavings < parsedValue) {
+        Scaffold.of(context).showSnackBar(
+          SnackBar(
+            behavior: SnackBarBehavior.floating,
+            action: SnackBarAction(
+              label: 'OK',
+              onPressed: () {},
+            ),
+            duration: Duration(seconds: 10),
+            content: Text(parsedValue.toStringAsFixed(2) +
+                ' lei exceeds the total amount available in savings(' +
+                totalSavings.toStringAsFixed(2) +
+                ' lei)'),
+          ),
+        );
+        return;
+      }
+    } else {
+      Map balance = await operationsService.getTotalBalance();
+      double totalBalance = balance['balance'] + amountToAdd;
+      if (totalBalance < parsedValue) {
+        Scaffold.of(context).showSnackBar(
+          SnackBar(
+            behavior: SnackBarBehavior.floating,
+            duration: Duration(seconds: 10),
+            action: SnackBarAction(
+              label: 'OK',
+              onPressed: () {},
+            ),
+            content: Text(parsedValue.toStringAsFixed(2) +
+                ' lei exceeds the total amount available in balance(' +
+                totalBalance.toStringAsFixed(2) +
+                ' lei)'),
+          ),
+        );
+        return;
+      }
+    }
+
     if (widget.operation == null) {
       Operation operation = Operation(
-          amount: double.parse(value),
+          amount: parsedValue,
           category: widget.category,
           createdAt: selectedDate.millisecondsSinceEpoch);
 
@@ -126,7 +192,7 @@ class _CalculatorWidgetState extends State<CalculatorWidget> {
               MaterialPageRoute(builder: (context) => HomeScreen()),
               (Route<dynamic> route) => false));
     } else {
-      widget.operation.amount = double.parse(value);
+      widget.operation.amount = parsedValue;
       widget.operation.createdAt = selectedDate.millisecondsSinceEpoch;
       OperationsService().update(widget.operation).then((value) {
         Navigator.pop(context);

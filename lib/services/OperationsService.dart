@@ -27,12 +27,18 @@ class OperationsService {
         await db.rawQuery("SELECT TOTAL(amount) as sum FROM operations "
             "JOIN categories ON categories.id = operations.category_id "
             "WHERE categories.type = 'savings'");
+
+    List<Map> withdraw =
+        await db.rawQuery("SELECT TOTAL(amount) as sum FROM operations "
+            "JOIN categories ON categories.id = operations.category_id "
+            "WHERE categories.type = 'withdraw'");
     var incomeSum = income.first['sum'];
     var expensesSum = expenses.first['sum'];
     var savingsSum = savings.first['sum'];
+    var withdrawSum = withdraw.first['sum'];
     return {
-      'balance': incomeSum - expensesSum - savingsSum,
-      'savings': savingsSum
+      'balance': incomeSum - expensesSum - savingsSum + withdrawSum,
+      'savings': savingsSum - withdrawSum
     };
   }
 

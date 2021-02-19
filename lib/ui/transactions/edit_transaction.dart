@@ -29,7 +29,8 @@ class _EditTransactionWidgetState extends State<EditTransactionWidget> {
     await Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => AddAmountScreen(
+            builder: (context) =>
+                AddAmountScreen(
                   category: widget.operation.category,
                   operation: widget.operation,
                 )));
@@ -37,10 +38,14 @@ class _EditTransactionWidgetState extends State<EditTransactionWidget> {
   }
 
   void editCategory() async {
+    if (widget.operation.category.type == withdrawType) {
+      return;
+    }
     await Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => SelectCategoryWidget(
+            builder: (context) =>
+                SelectCategoryWidget(
                   operation: widget.operation,
                 )));
     setState(() {});
@@ -50,13 +55,13 @@ class _EditTransactionWidgetState extends State<EditTransactionWidget> {
     DateTime date = await showDatePicker(
       context: context,
       initialDate:
-          DateTime.fromMillisecondsSinceEpoch(widget.operation.createdAt),
+      DateTime.fromMillisecondsSinceEpoch(widget.operation.createdAt),
       firstDate: DateTime(2019),
       lastDate: DateTime(2025),
     );
     if (date != null) {
       TimeOfDay time =
-          await showTimePicker(context: context, initialTime: TimeOfDay.now());
+      await showTimePicker(context: context, initialTime: TimeOfDay.now());
       int newCreatedAt =
           DateTime(date.year, date.month, date.day, time.hour, time.minute)
               .millisecondsSinceEpoch;
@@ -94,7 +99,7 @@ class _EditTransactionWidgetState extends State<EditTransactionWidget> {
                   Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(builder: (context) => HomeScreen()),
-                      (Route<dynamic> route) => false);
+                          (Route<dynamic> route) => false);
                 });
               },
             ),
@@ -112,7 +117,7 @@ class _EditTransactionWidgetState extends State<EditTransactionWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return WillPopScope(child: Scaffold(
       appBar: AppBar(
         title: Text('Edit transaction'),
         actions: [
@@ -165,7 +170,8 @@ class _EditTransactionWidgetState extends State<EditTransactionWidget> {
                 widget.operation.category.name,
                 style: TextStyle(fontSize: 24),
               ),
-              trailing: Icon(Icons.edit),
+              trailing: widget.operation.category.type != withdrawType ? Icon(
+                  Icons.edit) : null,
               onTap: editCategory,
             ),
             Divider(),
@@ -190,6 +196,11 @@ class _EditTransactionWidgetState extends State<EditTransactionWidget> {
           ],
         ),
       ),
-    );
+    ), onWillPop: () {
+      return Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => HomeScreen()),
+              (Route<dynamic> route) => false);
+    });
   }
 }

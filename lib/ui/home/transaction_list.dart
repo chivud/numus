@@ -56,8 +56,9 @@ class _TransactionListWidgetState extends State<TransactionListWidget> {
                         trailing: Text(
                           operation.amount.toStringAsFixed(2) + ' lei',
                           style: TextStyle(
-                            fontWeight: FontWeight.normal,
-                              color: operation.category.type == incomeType
+                              fontWeight: FontWeight.normal,
+                              color: operation.category.type == incomeType ||
+                                      operation.category.type == withdrawType
                                   ? Colors.green
                                   : Colors.red),
                         ),
@@ -65,7 +66,8 @@ class _TransactionListWidgetState extends State<TransactionListWidget> {
                           await Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => EditTransactionWidget(operation)));
+                                  builder: (context) =>
+                                      EditTransactionWidget(operation)));
                           setState(() {});
                         },
                       ),

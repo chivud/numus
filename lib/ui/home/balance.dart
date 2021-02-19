@@ -1,4 +1,7 @@
+import 'package:experiment/entities/category.dart';
+import 'package:experiment/services/CategoryService.dart';
 import 'package:experiment/services/OperationsService.dart';
+import 'package:experiment/ui/transactions/add_amount.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -20,6 +23,13 @@ class _BalanceWidgetState extends State<BalanceWidget> {
             savings = value['savings'];
           })
         });
+  }
+
+  void withdrawFromSavings() {
+    CategoryService().getWithdrawCategory().then((Category category) {
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => AddAmountScreen(category: category,)));
+    });
   }
 
   @override
@@ -104,28 +114,29 @@ class _BalanceWidgetState extends State<BalanceWidget> {
         ),
         if (savings > 0)
           Align(
-              heightFactor: 2.5,
-              alignment: Alignment.center,
-              child: SizedBox(
-                height: 35,
-                width: 35,
-                child: Container(
-                  padding: EdgeInsets.all(0),
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      // borderRadius: BorderRadius.all(Radius.circular(10)),
-                      color: Colors.green),
-                  child: IconButton(
-                      focusColor: Colors.grey,
-                      splashColor: Colors.transparent,
-                      highlightColor: Colors.transparent,
-                      padding: EdgeInsets.all(0),
-                      iconSize: 20,
-                      color: Colors.white,
-                      icon: Icon(Icons.west),
-                      onPressed: () {}),
-                ),
-              )),
+            heightFactor: 2.5,
+            alignment: Alignment.center,
+            child: SizedBox(
+              height: 35,
+              width: 35,
+              child: Container(
+                padding: EdgeInsets.all(0),
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    // borderRadius: BorderRadius.all(Radius.circular(10)),
+                    color: Colors.green),
+                child: IconButton(
+                    focusColor: Colors.grey,
+                    splashColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
+                    padding: EdgeInsets.all(0),
+                    iconSize: 20,
+                    color: Colors.white,
+                    icon: Icon(Icons.west),
+                    onPressed: withdrawFromSavings),
+              ),
+            ),
+          ),
       ],
     );
   }

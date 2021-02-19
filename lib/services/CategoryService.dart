@@ -21,4 +21,11 @@ class CategoryService {
     Database db = await DatabaseProvider().database;
     return await db.insert('categories', category.toMap());
   }
+
+  Future<Category> getWithdrawCategory() async{
+    Database db = await DatabaseProvider().database;
+    final List<Map<String, dynamic>> result = await db
+        .query('categories', where: 'type = ?', whereArgs: [withdrawType.tag], limit: 1);
+    return Category(id: result.first['id'], name: result.first['name'], color: result.first['color'], icon: result.first['icon'], type: withdrawType);
+  }
 }

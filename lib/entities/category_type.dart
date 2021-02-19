@@ -12,6 +12,8 @@ class CategoryType {
 final CategoryType incomeType = CategoryType(tag: 'income', name: 'Income');
 final CategoryType expenseType = CategoryType(tag: 'expense', name: 'Expense');
 final CategoryType savingType = CategoryType(tag: 'savings', name: 'Savings');
+final CategoryType withdrawType =
+    CategoryType(tag: 'withdraw', name: 'Withdraw');
 
 CategoryType getCategoryTypeByTag(String tag) {
   switch (tag) {
@@ -21,6 +23,8 @@ CategoryType getCategoryTypeByTag(String tag) {
       return expenseType;
     case 'savings':
       return savingType;
+    case 'withdraw':
+      return withdrawType;
   }
 
   throw Exception('Wrong category type tag:' + tag);
