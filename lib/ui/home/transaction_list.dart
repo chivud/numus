@@ -5,6 +5,7 @@ import 'package:experiment/services/OperationsService.dart';
 import 'package:experiment/ui/transactions/edit_transaction.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:month_picker_dialog/month_picker_dialog.dart';
 
 class TransactionListWidget extends StatefulWidget {
   @override
@@ -12,6 +13,18 @@ class TransactionListWidget extends StatefulWidget {
 }
 
 class _TransactionListWidgetState extends State<TransactionListWidget> {
+  int startOfMonth = 25;
+  DateTime selectedDate = DateTime.now();
+  final DateFormat dateFormatter = DateFormat(dateFormat);
+
+  DateTimeRange getTimeRange() {
+    DateTime startDate = selectedDate.day > startOfMonth
+        ? DateTime(selectedDate.year, selectedDate.month, startOfMonth)
+        : DateTime(selectedDate.year, selectedDate.month - 1, startOfMonth);
+    DateTime endDate = DateTime(startDate.year, startDate.month + 1, startDate.day - 1);
+    return DateTimeRange(start: startDate, end: endDate);
+  }
+
   Color getAmountColor(Operation operation) {
     return operation.category.type == incomeType ||
             operation.category.type == withdrawType
@@ -29,18 +42,47 @@ class _TransactionListWidgetState extends State<TransactionListWidget> {
 
   @override
   Widget build(BuildContext context) {
-    Future<List<Operation>> future = OperationsService().getBetween();
+    DateTimeRange range = getTimeRange();
+    Future<List<Operation>> future =
+        OperationsService().getBetween(range);
     return Card(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            padding: EdgeInsets.only(left: 20, top: 20, bottom: 5),
-            child: Text(
-              'This month',
-              style: TextStyle(fontSize: 14, color: Colors.grey),
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                padding: EdgeInsets.only(left: 20, top: 15, bottom: 5),
+                child: Text(
+                  'Transaction list',
+                  style: TextStyle(fontSize: 14, color: Colors.grey),
+                ),
+              ),
+              Container(
+                padding:
+                    EdgeInsets.only(left: 20, top: 15, bottom: 5, right: 20),
+                child: OutlineButton(
+                  color: Colors.blue,
+                  child: Text(
+                    dateFormatter.format(range.start) + ' - ' + dateFormatter.format(range.end),
+                    style: TextStyle(fontSize: 14, color: Colors.grey),
+                  ),
+                  onPressed: () async {
+                    DateTime date = await showMonthPicker(
+                      initialDate: selectedDate,
+                      context: context,
+                      firstDate: DateTime(selectedDate.year - 2),
+                      lastDate: DateTime(selectedDate.year + 2),
+                    );
+                    setState(() {
+                      selectedDate = DateTime(date.year, date.month, selectedDate.day);
+                    });
+                  },
+                ),
+              ),
+            ],
           ),
           Expanded(
             child: FutureBuilder<List<Operation>>(

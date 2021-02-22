@@ -2,6 +2,7 @@ import 'package:experiment/entities/category.dart';
 import 'package:experiment/entities/category_type.dart';
 import 'package:experiment/entities/operation.dart';
 import 'package:experiment/services/DatabaseProvider.dart';
+import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 
 class OperationsService {
@@ -42,11 +43,9 @@ class OperationsService {
     };
   }
 
-  Future<List<Operation>> getBetween() async {
-    //TODO Remote hardcoded
-    DateTime now = DateTime.now();
-    DateTime firstDayOfMonth = DateTime(now.year, now.month);
-    DateTime lastDayOfMonth = DateTime(now.year, now.month + 1);
+  Future<List<Operation>> getBetween(DateTimeRange range) async {
+    DateTime firstDayOfMonth = range.start;
+    DateTime lastDayOfMonth = range.end;
     Database db = await DatabaseProvider().database;
 
     List<Map> list = await db.rawQuery(
