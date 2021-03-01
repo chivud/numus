@@ -4,6 +4,7 @@ import 'package:experiment/entities/operation.dart';
 import 'package:experiment/services/OperationsService.dart';
 import 'package:experiment/ui/transactions/edit_transaction.dart';
 import 'package:flutter/material.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
 import 'package:month_picker_dialog/month_picker_dialog.dart';
 
@@ -15,10 +16,13 @@ class TransactionListWidget extends StatefulWidget {
 }
 
 class _TransactionListWidgetState extends State<TransactionListWidget> {
+  final perPage = 50;
   int startOfMonth = 25;
   DateMode mode = DateMode.month;
   DateTimeRange range;
   final DateFormat dateFormatter = DateFormat(dateFormat);
+  final PagingController<int, Operation> pagingController =
+      PagingController(firstPageKey: 0);
 
   DateTimeRange getTimeRange({selectedDate}) {
     DateTime now = selectedDate != null ? selectedDate : DateTime.now();
@@ -31,8 +35,28 @@ class _TransactionListWidgetState extends State<TransactionListWidget> {
   }
 
   initState() {
-    super.initState();
     range = getTimeRange(selectedDate: null);
+    pagingController.addPageRequestListener((pageKey) {
+      fetchPage(pageKey);
+    });
+    super.initState();
+  }
+
+  dispose() {
+    pagingController.dispose();
+    super.dispose();
+  }
+
+  fetchPage(int page) {
+    OperationsService()
+        .getOperations(mode == DateMode.all ? null : range, page, perPage)
+        .then((items) {
+      if (items.length < perPage) {
+        pagingController.appendLastPage(items);
+      } else {
+        pagingController.appendPage(items, ++page);
+      }
+    });
   }
 
   Color getAmountColor(Operation operation) {
@@ -89,6 +113,7 @@ class _TransactionListWidgetState extends State<TransactionListWidget> {
       setState(() {
         mode = DateMode.month;
         range = getTimeRange(selectedDate: date);
+        pagingController.refresh();
       });
     }
   }
@@ -97,6 +122,7 @@ class _TransactionListWidgetState extends State<TransactionListWidget> {
     Navigator.pop(context);
     setState(() {
       mode = DateMode.all;
+      pagingController.refresh();
     });
   }
 
@@ -119,14 +145,14 @@ class _TransactionListWidgetState extends State<TransactionListWidget> {
       setState(() {
         mode = DateMode.range;
         range = result;
+        pagingController.refresh();
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    Future<List<Operation>> future =
-        OperationsService().getOperations(mode == DateMode.all ? null : range);
+    final DateFormat formatter = DateFormat(dateTimeFormat);
     return Card(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -157,58 +183,47 @@ class _TransactionListWidgetState extends State<TransactionListWidget> {
             ],
           ),
           Expanded(
-            child: FutureBuilder<List<Operation>>(
-              future: future,
-              builder: (BuildContext context, AsyncSnapshot snapshot) {
-                List<Widget> children = [];
-                if (snapshot.hasData && snapshot.data.isNotEmpty) {
-                  final DateFormat formatter = DateFormat(dateTimeFormat);
-                  for (Operation operation in snapshot.data) {
-                    children.add(
-                      ListTile(
-                        contentPadding: EdgeInsets.all(0),
-                        leading: Container(
-                          padding: EdgeInsets.all(7),
-                          decoration: BoxDecoration(
-                              color: Color(operation.category.color),
-                              shape: BoxShape.circle),
-                          child: Icon(
-                            IconData(operation.category.icon,
-                                fontFamily: 'MaterialIcons'),
-                            color: Colors.white,
-                          ),
-                        ),
-                        title: Text(operation.category.name),
-                        subtitle: Text(formatter.format(
-                            DateTime.fromMillisecondsSinceEpoch(
-                                operation.createdAt))),
-                        trailing: Text(
-                          operation.amount.toStringAsFixed(2) + ' lei',
-                          style: TextStyle(
-                              fontWeight: FontWeight.normal,
-                              color: getAmountColor(operation)),
-                        ),
-                        onTap: () {
-                          editTransaction(operation);
-                        },
-                      ),
-                    );
-                  }
-                } else {
-                  children.add(ListTile(
-                    title: Text('There are no operations yet..'),
-                    onTap: () {},
-                  ));
-                }
-
-                return ListView(
-                  padding: EdgeInsets.only(left: 10, right: 10),
-                  children: children,
-                  shrinkWrap: true,
+            child: PagedListView(
+              padding: EdgeInsets.only(left: 10, right: 10),
+              shrinkWrap: true,
+              pagingController: pagingController,
+              builderDelegate:
+                  PagedChildBuilderDelegate(noItemsFoundIndicatorBuilder: (_) {
+                return ListTile(
+                  title: Text('There are no operations yet..'),
+                  onTap: () {},
                 );
-              },
+              }, itemBuilder: (context, operation, index) {
+                return ListTile(
+                  contentPadding: EdgeInsets.all(0),
+                  leading: Container(
+                    padding: EdgeInsets.all(7),
+                    decoration: BoxDecoration(
+                        color: Color(operation.category.color),
+                        shape: BoxShape.circle),
+                    child: Icon(
+                      IconData(operation.category.icon,
+                          fontFamily: 'MaterialIcons'),
+                      color: Colors.white,
+                    ),
+                  ),
+                  title: Text(operation.category.name),
+                  subtitle: Text(formatter.format(
+                      DateTime.fromMillisecondsSinceEpoch(
+                          operation.createdAt))),
+                  trailing: Text(
+                    operation.amount.toStringAsFixed(2) + ' lei',
+                    style: TextStyle(
+                        fontWeight: FontWeight.normal,
+                        color: getAmountColor(operation)),
+                  ),
+                  onTap: () {
+                    editTransaction(operation);
+                  },
+                );
+              }),
             ),
-          )
+          ),
         ],
       ),
     );

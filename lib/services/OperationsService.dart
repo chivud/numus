@@ -43,14 +43,15 @@ class OperationsService {
     };
   }
 
-  Future<List<Operation>> getOperations(DateTimeRange range) async {
+  Future<List<Operation>> getOperations(DateTimeRange range, int page, int perPage) async {
+    print("page " + page.toString());
     if(range != null){
-      return getBetween(range);
+      return getBetween(range, page, perPage);
     }
-    return getAll();
+    return getAll(page, perPage);
   }
 
-  Future<List<Operation>> getAll() async{
+  Future<List<Operation>> getAll(int page, int perPage) async{
     Database db = await DatabaseProvider().database;
 
     List<Map> list = await db.rawQuery(
@@ -64,7 +65,8 @@ class OperationsService {
             "categories.type"
             " FROM operations "
             "JOIN categories ON operations.category_id = categories.id "
-            "ORDER BY operations.created_at DESC",);
+            "ORDER BY operations.created_at DESC "
+            "LIMIT ? OFFSET ?",[perPage, page * perPage]);
     Map categories = {};
     List<Operation> operations = [];
     for (var item in list) {
@@ -90,7 +92,7 @@ class OperationsService {
     return operations;
   }
 
-  Future<List<Operation>> getBetween(DateTimeRange range) async {
+  Future<List<Operation>> getBetween(DateTimeRange range, page, int perPage) async {
     Database db = await DatabaseProvider().database;
     List<Map> list = await db.rawQuery(
         "SELECT  operations.id, "
@@ -104,10 +106,13 @@ class OperationsService {
         " FROM operations "
         "JOIN categories ON operations.category_id = categories.id "
         "WHERE operations.created_at BETWEEN ? AND ? "
-        "ORDER BY operations.created_at DESC",
+        "ORDER BY operations.created_at DESC "
+        "LIMIT ? OFFSET ?",
         [
           range.start.millisecondsSinceEpoch,
-          range.end.millisecondsSinceEpoch
+          range.end.millisecondsSinceEpoch,
+          perPage,
+          page * perPage
         ]);
     Map categories = {};
     List<Operation> operations = [];
