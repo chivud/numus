@@ -43,11 +43,55 @@ class OperationsService {
     };
   }
 
-  Future<List<Operation>> getBetween(DateTimeRange range) async {
-    DateTime firstDayOfMonth = range.start;
-    DateTime lastDayOfMonth = range.end;
+  Future<List<Operation>> getOperations(DateTimeRange range) async {
+    if(range != null){
+      return getBetween(range);
+    }
+    return getAll();
+  }
+
+  Future<List<Operation>> getAll() async{
     Database db = await DatabaseProvider().database;
 
+    List<Map> list = await db.rawQuery(
+        "SELECT  operations.id, "
+            "operations.amount, "
+            "operations.created_at, "
+            "operations.category_id, "
+            "categories.name, "
+            "categories.icon, "
+            "categories.color, "
+            "categories.type"
+            " FROM operations "
+            "JOIN categories ON operations.category_id = categories.id "
+            "ORDER BY operations.created_at DESC",);
+    Map categories = {};
+    List<Operation> operations = [];
+    for (var item in list) {
+      Category category;
+      if (categories.containsKey(item['category_id'])) {
+        category = categories[item['category_id']];
+      } else {
+        category = Category(
+            id: item['category_id'],
+            name: item['name'],
+            icon: item['icon'],
+            color: item['color'],
+            type: getCategoryTypeByTag(item['type']));
+        categories[item['category_id']] = category;
+      }
+      Operation operation = Operation(
+          id: item['id'],
+          amount: item['amount'],
+          createdAt: item['created_at'],
+          category: category);
+      operations.add(operation);
+    }
+    return operations;
+  }
+
+  Future<List<Operation>> getBetween(DateTimeRange range) async {
+    Database db = await DatabaseProvider().database;
     List<Map> list = await db.rawQuery(
         "SELECT  operations.id, "
         "operations.amount, "
@@ -62,8 +106,8 @@ class OperationsService {
         "WHERE operations.created_at BETWEEN ? AND ? "
         "ORDER BY operations.created_at DESC",
         [
-          firstDayOfMonth.millisecondsSinceEpoch,
-          lastDayOfMonth.millisecondsSinceEpoch
+          range.start.millisecondsSinceEpoch,
+          range.end.millisecondsSinceEpoch
         ]);
     Map categories = {};
     List<Operation> operations = [];

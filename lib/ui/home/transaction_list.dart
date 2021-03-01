@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:month_picker_dialog/month_picker_dialog.dart';
 
+enum DateMode { month, range, all }
+
 class TransactionListWidget extends StatefulWidget {
   @override
   _TransactionListWidgetState createState() => _TransactionListWidgetState();
@@ -14,16 +16,23 @@ class TransactionListWidget extends StatefulWidget {
 
 class _TransactionListWidgetState extends State<TransactionListWidget> {
   int startOfMonth = 25;
-  DateTime selectedDate = DateTime.now();
+  DateMode mode = DateMode.month;
+  DateTimeRange range;
   final DateFormat dateFormatter = DateFormat(dateFormat);
 
-  DateTimeRange getTimeRange() {
-    DateTime startDate = selectedDate.day > startOfMonth
-        ? DateTime(selectedDate.year, selectedDate.month, startOfMonth)
-        : DateTime(selectedDate.year, selectedDate.month - 1, startOfMonth);
+  DateTimeRange getTimeRange({selectedDate}) {
+    DateTime now = selectedDate != null ? selectedDate : DateTime.now();
+    DateTime startDate = now.day > startOfMonth
+        ? DateTime(now.year, now.month, startOfMonth, 0)
+        : DateTime(now.year, now.month - 1, startOfMonth, 0);
     DateTime endDate =
-        DateTime(startDate.year, startDate.month + 1, startDate.day - 1);
+        DateTime(startDate.year, startDate.month + 1, startDate.day - 1, 24);
     return DateTimeRange(start: startDate, end: endDate);
+  }
+
+  initState() {
+    super.initState();
+    range = getTimeRange(selectedDate: null);
   }
 
   Color getAmountColor(Operation operation) {
@@ -49,14 +58,19 @@ class _TransactionListWidgetState extends State<TransactionListWidget> {
             shrinkWrap: true,
             children: [
               ListTile(
+                leading: Icon(Icons.all_inclusive),
                 title: Text('Show all'),
+                onTap: showAll,
               ),
               ListTile(
+                leading: Icon(Icons.calendar_today),
                 title: Text('Select month'),
                 onTap: selectMonth,
               ),
               ListTile(
+                leading: Icon(Icons.date_range),
                 title: Text('Select date range'),
+                onTap: showDateRange,
               ),
             ],
           );
@@ -66,22 +80,53 @@ class _TransactionListWidgetState extends State<TransactionListWidget> {
   void selectMonth() async {
     Navigator.pop(context);
     DateTime date = await showMonthPicker(
-      initialDate: selectedDate,
+      initialDate: range.end,
       context: context,
-      firstDate: DateTime(selectedDate.year - 2),
-      lastDate: DateTime(selectedDate.year + 2),
+      firstDate: DateTime(range.end.year - 2),
+      lastDate: DateTime(range.end.year + 2),
     );
     if (date != null) {
       setState(() {
-        selectedDate = DateTime(date.year, date.month, selectedDate.day);
+        mode = DateMode.month;
+        range = getTimeRange(selectedDate: date);
+      });
+    }
+  }
+
+  void showAll() {
+    Navigator.pop(context);
+    setState(() {
+      mode = DateMode.all;
+    });
+  }
+
+  String getDateText(DateTimeRange range) {
+    if (mode == DateMode.all) {
+      return 'All';
+    }
+    return dateFormatter.format(range.start) +
+        ' - ' +
+        dateFormatter.format(range.end);
+  }
+
+  void showDateRange() async {
+    Navigator.pop(context);
+    DateTimeRange result = await showDateRangePicker(
+        context: context,
+        firstDate: DateTime(range.start.year - 1),
+        lastDate: DateTime(range.start.year + 1));
+    if (result != null) {
+      setState(() {
+        mode = DateMode.range;
+        range = result;
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    DateTimeRange range = getTimeRange();
-    Future<List<Operation>> future = OperationsService().getBetween(range);
+    Future<List<Operation>> future =
+        OperationsService().getOperations(mode == DateMode.all ? null : range);
     return Card(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -103,9 +148,7 @@ class _TransactionListWidgetState extends State<TransactionListWidget> {
                 child: OutlineButton(
                   color: Colors.blue,
                   child: Text(
-                    dateFormatter.format(range.start) +
-                        ' - ' +
-                        dateFormatter.format(range.end),
+                    getDateText(range),
                     style: TextStyle(fontSize: 14, color: Colors.grey),
                   ),
                   onPressed: showDateMenu,
