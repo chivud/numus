@@ -21,7 +21,8 @@ class _TransactionListWidgetState extends State<TransactionListWidget> {
     DateTime startDate = selectedDate.day > startOfMonth
         ? DateTime(selectedDate.year, selectedDate.month, startOfMonth)
         : DateTime(selectedDate.year, selectedDate.month - 1, startOfMonth);
-    DateTime endDate = DateTime(startDate.year, startDate.month + 1, startDate.day - 1);
+    DateTime endDate =
+        DateTime(startDate.year, startDate.month + 1, startDate.day - 1);
     return DateTimeRange(start: startDate, end: endDate);
   }
 
@@ -40,11 +41,47 @@ class _TransactionListWidgetState extends State<TransactionListWidget> {
     setState(() {});
   }
 
+  void showDateMenu() async {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return ListView(
+            shrinkWrap: true,
+            children: [
+              ListTile(
+                title: Text('Show all'),
+              ),
+              ListTile(
+                title: Text('Select month'),
+                onTap: selectMonth,
+              ),
+              ListTile(
+                title: Text('Select date range'),
+              ),
+            ],
+          );
+        });
+  }
+
+  void selectMonth() async {
+    Navigator.pop(context);
+    DateTime date = await showMonthPicker(
+      initialDate: selectedDate,
+      context: context,
+      firstDate: DateTime(selectedDate.year - 2),
+      lastDate: DateTime(selectedDate.year + 2),
+    );
+    if (date != null) {
+      setState(() {
+        selectedDate = DateTime(date.year, date.month, selectedDate.day);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     DateTimeRange range = getTimeRange();
-    Future<List<Operation>> future =
-        OperationsService().getBetween(range);
+    Future<List<Operation>> future = OperationsService().getBetween(range);
     return Card(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -66,20 +103,12 @@ class _TransactionListWidgetState extends State<TransactionListWidget> {
                 child: OutlineButton(
                   color: Colors.blue,
                   child: Text(
-                    dateFormatter.format(range.start) + ' - ' + dateFormatter.format(range.end),
+                    dateFormatter.format(range.start) +
+                        ' - ' +
+                        dateFormatter.format(range.end),
                     style: TextStyle(fontSize: 14, color: Colors.grey),
                   ),
-                  onPressed: () async {
-                    DateTime date = await showMonthPicker(
-                      initialDate: selectedDate,
-                      context: context,
-                      firstDate: DateTime(selectedDate.year - 2),
-                      lastDate: DateTime(selectedDate.year + 2),
-                    );
-                    setState(() {
-                      selectedDate = DateTime(date.year, date.month, selectedDate.day);
-                    });
-                  },
+                  onPressed: showDateMenu,
                 ),
               ),
             ],
