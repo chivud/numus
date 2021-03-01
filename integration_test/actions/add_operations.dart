@@ -18,7 +18,8 @@ showHomeScreen(WidgetTester tester, String balance,  {transactionList}) async {
 
 showCategoryTypesScreen(WidgetTester tester) async {
   await tester.tap(find.byIcon(Icons.add));
-  await tester.pumpAndSettle();
+  await tester.pump();
+  await tester.pump(Duration(seconds: 3));
   expect(find.text('Select category'), findsOneWidget);
   expect(find.text('EXPENSE'), findsOneWidget);
   expect(find.text('INCOME'), findsOneWidget);
@@ -33,15 +34,22 @@ addExpense(WidgetTester tester, String categoryName, String amount) async {
   await addAmount(tester, 'EXPENSE', categoryName, amount);
 }
 
+addSavings(WidgetTester tester, String categoryName, String amount) async {
+  await addAmount(tester, 'SAVINGS', categoryName, amount);
+}
+
 addAmount(WidgetTester tester, String categoryType, String categoryName, String amount) async{
   await tester.tap(find.text(categoryType));
-  await tester.pumpAndSettle();
+  await tester.pump();
+  await tester.pump(Duration(seconds: 3));
   await tester.tap(find.text(categoryName));
-  await tester.pumpAndSettle();
+  await tester.pump();
+  await tester.pump(Duration(seconds: 3));
   expect(find.text('Add ' + categoryName + ' amount'), findsOneWidget);
   for(var char in amount.characters){
     await tester.tap(find.widgetWithText(CalculatorKey, char));
   }
   await tester.tap(find.byIcon(Icons.done));
-  await tester.pumpAndSettle();
+  await tester.pump();
+  await tester.pump(Duration(seconds: 3));
 }
