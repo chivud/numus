@@ -44,7 +44,6 @@ class OperationsService {
   }
 
   Future<List<Operation>> getOperations(DateTimeRange range, int page, int perPage) async {
-    print("page " + page.toString());
     if(range != null){
       return getBetween(range, page, perPage);
     }

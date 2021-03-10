@@ -1,4 +1,6 @@
 import 'package:experiment/entities/currency.dart';
+import 'package:experiment/services/SharedPreferencesService.dart';
+import 'package:experiment/ui/home/home_screen.dart';
 import 'package:flutter/material.dart';
 
 class CurrencyPickerWidget extends StatefulWidget {
@@ -30,7 +32,13 @@ class _CurrencyPickerWidgetState extends State<CurrencyPickerWidget> {
     filterList();
   }
 
-  selectCurrency(int index) {}
+  selectCurrency(int index) async {
+    SharedPreferencesService().setSelectedCurrency(filteredList[index]).then(
+        (value) => Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => HomeScreen()),
+            (Route<dynamic> route) => false));
+  }
 
   @override
   Widget build(BuildContext context) {
