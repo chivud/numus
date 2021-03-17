@@ -1,5 +1,6 @@
 import 'package:experiment/constants/date.dart';
 import 'package:experiment/entities/category_type.dart';
+import 'package:experiment/entities/currency.dart';
 import 'package:experiment/entities/operation.dart';
 import 'package:experiment/services/OperationsService.dart';
 import 'package:experiment/ui/home/home_screen.dart';
@@ -8,6 +9,7 @@ import 'package:experiment/ui/transactions/select_category.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class EditTransactionWidget extends StatefulWidget {
   final Operation operation;
@@ -117,6 +119,7 @@ class _EditTransactionWidgetState extends State<EditTransactionWidget> {
 
   @override
   Widget build(BuildContext context) {
+    Currency currency = Provider.of<Currency>(context);
     return WillPopScope(child: Scaffold(
       appBar: AppBar(
         title: Text('Edit transaction'),
@@ -141,7 +144,7 @@ class _EditTransactionWidgetState extends State<EditTransactionWidget> {
                 ),
               ),
               title: Text(
-                widget.operation.amount.toStringAsFixed(2) + ' lei',
+                widget.operation.amount.toStringAsFixed(2) + ' ' + currency.symbol,
                 style: TextStyle(
                     fontSize: 24,
                     color: widget.operation.category.type == incomeType

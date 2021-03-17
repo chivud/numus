@@ -4,6 +4,7 @@ import 'package:experiment/ui/home/home_screen.dart';
 import 'package:experiment/ui/wizard/currency_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 import 'constants/application.dart';
 import 'constants/currencies.dart';
@@ -14,32 +15,35 @@ void main() async {
   await DatabaseProvider().database;
   Currency currency = await SharedPreferencesService().getSelectedCurrency();
   Widget first;
-  if(currency != null){
+  if (currency.isInitialized()) {
     first = HomeScreen();
-  }else{
+  } else {
     first = CurrencyPickerWidget(currencies);
   }
-  runApp(MyApp(first));
+  runApp(MyApp(first, currency: currency,));
 }
 
 class MyApp extends StatelessWidget {
   final Widget first;
+  final Currency currency;
 
-  MyApp(this.first);
+  MyApp(this.first, {this.currency});
 
   @override
   Widget build(BuildContext context) {
     WidgetsFlutterBinding.ensureInitialized();
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: appName,
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-        ),
-        home: first);
+    return ChangeNotifierProvider(
+      create: (_) => currency,
+      child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: appName,
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+            visualDensity: VisualDensity.adaptivePlatformDensity,
+          ),
+          home: first),
+    );
   }
 }

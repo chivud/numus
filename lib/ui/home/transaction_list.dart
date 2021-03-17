@@ -1,5 +1,6 @@
 import 'package:experiment/constants/date.dart';
 import 'package:experiment/entities/category_type.dart';
+import 'package:experiment/entities/currency.dart';
 import 'package:experiment/entities/operation.dart';
 import 'package:experiment/services/OperationsService.dart';
 import 'package:experiment/ui/transactions/edit_transaction.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
 import 'package:month_picker_dialog/month_picker_dialog.dart';
+import 'package:provider/provider.dart';
 
 enum DateMode { month, range, all }
 
@@ -152,6 +154,7 @@ class _TransactionListWidgetState extends State<TransactionListWidget> {
 
   @override
   Widget build(BuildContext context) {
+    Currency currency = Provider.of<Currency>(context);
     final DateFormat formatter = DateFormat(dateTimeFormat);
     return Card(
       child: Column(
@@ -212,7 +215,7 @@ class _TransactionListWidgetState extends State<TransactionListWidget> {
                       DateTime.fromMillisecondsSinceEpoch(
                           operation.createdAt))),
                   trailing: Text(
-                    operation.amount.toStringAsFixed(2) + ' lei',
+                    operation.amount.toStringAsFixed(2) + ' ' + currency.symbol,
                     style: TextStyle(
                         fontWeight: FontWeight.normal,
                         color: getAmountColor(operation)),

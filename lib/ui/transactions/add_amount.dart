@@ -1,6 +1,7 @@
 import 'package:experiment/constants/date.dart';
 import 'package:experiment/entities/category.dart';
 import 'package:experiment/entities/category_type.dart';
+import 'package:experiment/entities/currency.dart';
 import 'package:experiment/entities/operation.dart';
 import 'package:experiment/services/OperationsService.dart';
 import 'package:experiment/ui/home/home_screen.dart';
@@ -8,6 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class AddAmountScreen extends StatelessWidget {
   final Category category;
@@ -151,9 +153,9 @@ class _CalculatorWidgetState extends State<CalculatorWidget> {
             ),
             duration: Duration(seconds: 10),
             content: Text(parsedValue.toStringAsFixed(2) +
-                ' lei exceeds the total amount available in savings(' +
+                ' exceeds the total amount available in savings(' +
                 totalSavings.toStringAsFixed(2) +
-                ' lei)'),
+                ')'),
           ),
         );
         return;
@@ -171,9 +173,9 @@ class _CalculatorWidgetState extends State<CalculatorWidget> {
               onPressed: () {},
             ),
             content: Text(parsedValue.toStringAsFixed(2) +
-                ' lei exceeds the total amount available in balance(' +
+                ' exceeds the total amount available in balance(' +
                 totalBalance.toStringAsFixed(2) +
-                ' lei)'),
+                ')'),
           ),
         );
         return;
@@ -233,6 +235,7 @@ class _CalculatorWidgetState extends State<CalculatorWidget> {
 
   @override
   Widget build(BuildContext context) {
+    Currency currency = Provider.of<Currency>(context);
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
@@ -248,7 +251,7 @@ class _CalculatorWidgetState extends State<CalculatorWidget> {
                   style: TextStyle(fontSize: 50),
                 ),
                 Text(
-                  ' lei',
+                  ' ' + currency.symbol,
                   style: TextStyle(fontSize: 50),
                 ),
               ],

@@ -1,9 +1,11 @@
 import 'package:experiment/entities/category.dart';
+import 'package:experiment/entities/currency.dart';
 import 'package:experiment/services/CategoryService.dart';
 import 'package:experiment/services/OperationsService.dart';
 import 'package:experiment/ui/transactions/add_amount.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 
 class BalanceWidget extends StatefulWidget {
   @override
@@ -24,6 +26,7 @@ class _BalanceWidgetState extends State<BalanceWidget> {
 
   @override
   Widget build(BuildContext context) {
+    Currency currency = Provider.of<Currency>(context);
     return FutureBuilder(
         future: OperationsService().getTotalBalance(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -61,7 +64,7 @@ class _BalanceWidgetState extends State<BalanceWidget> {
                               children: [
                                 Container(
                                   child: Text(
-                                    totalBalance.toStringAsFixed(2) + ' lei',
+                                    totalBalance.toStringAsFixed(2) + ' ' + currency.symbol,
                                     style: TextStyle(fontSize: 20),
                                   ),
                                 )
@@ -98,7 +101,7 @@ class _BalanceWidgetState extends State<BalanceWidget> {
                                 children: [
                                   Container(
                                     child: Text(
-                                      savings.toStringAsFixed(2) + ' lei',
+                                      savings.toStringAsFixed(2) + ' ' + currency.symbol,
                                       style: TextStyle(fontSize: 20),
                                     ),
                                   )

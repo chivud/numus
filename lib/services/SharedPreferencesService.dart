@@ -10,9 +10,9 @@ class SharedPreferencesService {
     if (pref.containsKey(currencyDisplayNameKey)) {
       final displayName = pref.getString(currencyDisplayNameKey);
       final symbol = pref.getString(currencySymbolKey);
-      return Currency(displayName, symbol);
+      return Currency(displayName: displayName, symbol: symbol);
     }
-    return null;
+    return Currency();
   }
 
   Future<void> setSelectedCurrency(Currency currency) async{

@@ -2,6 +2,7 @@ import 'package:experiment/entities/currency.dart';
 import 'package:experiment/services/SharedPreferencesService.dart';
 import 'package:experiment/ui/home/home_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CurrencyPickerWidget extends StatefulWidget {
   final List<Currency> currencies;
@@ -32,16 +33,20 @@ class _CurrencyPickerWidgetState extends State<CurrencyPickerWidget> {
     filterList();
   }
 
-  selectCurrency(int index) async {
+  selectCurrency(int index, Currency currency) async {
     SharedPreferencesService().setSelectedCurrency(filteredList[index]).then(
-        (value) => Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => HomeScreen()),
-            (Route<dynamic> route) => false));
+        (value) {
+          currency.init(name: filteredList[index].displayName, sym: filteredList[index].symbol);
+          return Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => HomeScreen()),
+                  (Route<dynamic> route) => false);
+        });
   }
 
   @override
   Widget build(BuildContext context) {
+    Currency currency = Provider.of<Currency>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Pick your currency'),
@@ -66,7 +71,7 @@ class _CurrencyPickerWidgetState extends State<CurrencyPickerWidget> {
                   title: Text(filteredList[index].symbol +
                       " - " +
                       filteredList[index].displayName),
-                  onTap: () => selectCurrency(index),
+                  onTap: () => selectCurrency(index, currency),
                 );
               },
             ),
