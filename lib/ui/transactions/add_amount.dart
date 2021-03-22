@@ -3,6 +3,7 @@ import 'package:experiment/entities/category.dart';
 import 'package:experiment/entities/category_type.dart';
 import 'package:experiment/entities/currency.dart';
 import 'package:experiment/entities/operation.dart';
+import 'package:experiment/entities/settings.dart';
 import 'package:experiment/services/OperationsService.dart';
 import 'package:experiment/ui/home/home_screen.dart';
 import 'package:flutter/cupertino.dart';
@@ -235,7 +236,7 @@ class _CalculatorWidgetState extends State<CalculatorWidget> {
 
   @override
   Widget build(BuildContext context) {
-    Currency currency = Provider.of<Currency>(context);
+    Settings settings = Provider.of<Settings>(context);
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
@@ -251,7 +252,7 @@ class _CalculatorWidgetState extends State<CalculatorWidget> {
                   style: TextStyle(fontSize: 50),
                 ),
                 Text(
-                  ' ' + currency.symbol,
+                  ' ' + settings.currency.symbol,
                   style: TextStyle(fontSize: 50),
                 ),
               ],

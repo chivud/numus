@@ -1,13 +1,16 @@
 import 'package:experiment/constants/application.dart';
+import 'package:experiment/entities/settings.dart';
 import 'package:experiment/ui/home/balance.dart';
 import 'package:experiment/ui/home/transaction_list.dart';
 import 'package:experiment/ui/transactions/select_category.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    Settings settings = Provider.of<Settings>(context);
     return Scaffold(
       appBar: AppBar(title: Text(appName)),
       body: Container(
@@ -16,7 +19,7 @@ class HomeScreen extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               BalanceWidget(),
-              Expanded(child: TransactionListWidget(),)
+              Expanded(child: TransactionListWidget(settings.startOfMonth),)
             ],
           )),
       floatingActionButton: SizedBox(

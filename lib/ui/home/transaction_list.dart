@@ -2,6 +2,7 @@ import 'package:experiment/constants/date.dart';
 import 'package:experiment/entities/category_type.dart';
 import 'package:experiment/entities/currency.dart';
 import 'package:experiment/entities/operation.dart';
+import 'package:experiment/entities/settings.dart';
 import 'package:experiment/services/OperationsService.dart';
 import 'package:experiment/ui/transactions/edit_transaction.dart';
 import 'package:flutter/material.dart';
@@ -13,13 +14,16 @@ import 'package:provider/provider.dart';
 enum DateMode { month, range, all }
 
 class TransactionListWidget extends StatefulWidget {
+  final int startOfMonth;
+
+  TransactionListWidget(this.startOfMonth);
+
   @override
   _TransactionListWidgetState createState() => _TransactionListWidgetState();
 }
 
 class _TransactionListWidgetState extends State<TransactionListWidget> {
   final perPage = 50;
-  int startOfMonth = 25;
   DateMode mode = DateMode.month;
   DateTimeRange range;
   final DateFormat dateFormatter = DateFormat(dateFormat);
@@ -28,9 +32,9 @@ class _TransactionListWidgetState extends State<TransactionListWidget> {
 
   DateTimeRange getTimeRange({selectedDate}) {
     DateTime now = selectedDate != null ? selectedDate : DateTime.now();
-    DateTime startDate = now.day > startOfMonth
-        ? DateTime(now.year, now.month, startOfMonth, 0)
-        : DateTime(now.year, now.month - 1, startOfMonth, 0);
+    DateTime startDate = now.day > widget.startOfMonth
+        ? DateTime(now.year, now.month, widget.startOfMonth, 0)
+        : DateTime(now.year, now.month - 1, widget.startOfMonth, 0);
     DateTime endDate =
         DateTime(startDate.year, startDate.month + 1, startDate.day - 1, 24);
     return DateTimeRange(start: startDate, end: endDate);
@@ -154,7 +158,7 @@ class _TransactionListWidgetState extends State<TransactionListWidget> {
 
   @override
   Widget build(BuildContext context) {
-    Currency currency = Provider.of<Currency>(context);
+    Settings settings = Provider.of<Settings>(context);
     final DateFormat formatter = DateFormat(dateTimeFormat);
     return Card(
       child: Column(
@@ -215,7 +219,7 @@ class _TransactionListWidgetState extends State<TransactionListWidget> {
                       DateTime.fromMillisecondsSinceEpoch(
                           operation.createdAt))),
                   trailing: Text(
-                    operation.amount.toStringAsFixed(2) + ' ' + currency.symbol,
+                    operation.amount.toStringAsFixed(2) + ' ' + settings.currency.symbol,
                     style: TextStyle(
                         fontWeight: FontWeight.normal,
                         color: getAmountColor(operation)),

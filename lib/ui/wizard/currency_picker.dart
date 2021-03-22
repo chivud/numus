@@ -1,6 +1,7 @@
 import 'package:experiment/entities/currency.dart';
+import 'package:experiment/entities/settings.dart';
 import 'package:experiment/services/SharedPreferencesService.dart';
-import 'package:experiment/ui/home/home_screen.dart';
+import 'package:experiment/ui/wizard/start_of_month_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -33,20 +34,22 @@ class _CurrencyPickerWidgetState extends State<CurrencyPickerWidget> {
     filterList();
   }
 
-  selectCurrency(int index, Currency currency) async {
-    SharedPreferencesService().setSelectedCurrency(filteredList[index]).then(
-        (value) {
-          currency.init(name: filteredList[index].displayName, sym: filteredList[index].symbol);
-          return Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (context) => HomeScreen()),
-                  (Route<dynamic> route) => false);
-        });
+  selectCurrency(int index, Settings settings) async {
+    SharedPreferencesService()
+        .setSelectedCurrency(filteredList[index])
+        .then((value) {
+      Currency currency = Currency(
+          displayName: filteredList[index].displayName,
+          symbol: filteredList[index].symbol);
+      settings.setCurrency(currency);
+      return Navigator.push(context,
+          MaterialPageRoute(builder: (context) => StartOfMonthPickerWidget()));
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    Currency currency = Provider.of<Currency>(context);
+    Settings settings = Provider.of<Settings>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Pick your currency'),
@@ -71,7 +74,7 @@ class _CurrencyPickerWidgetState extends State<CurrencyPickerWidget> {
                   title: Text(filteredList[index].symbol +
                       " - " +
                       filteredList[index].displayName),
-                  onTap: () => selectCurrency(index, currency),
+                  onTap: () => selectCurrency(index, settings),
                 );
               },
             ),
