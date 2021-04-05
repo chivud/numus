@@ -1,6 +1,5 @@
 import 'package:experiment/constants/date.dart';
 import 'package:experiment/entities/category_type.dart';
-import 'package:experiment/entities/currency.dart';
 import 'package:experiment/entities/operation.dart';
 import 'package:experiment/entities/settings.dart';
 import 'package:experiment/services/OperationsService.dart';

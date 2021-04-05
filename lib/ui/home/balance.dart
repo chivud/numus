@@ -1,5 +1,4 @@
 import 'package:experiment/entities/category.dart';
-import 'package:experiment/entities/currency.dart';
 import 'package:experiment/entities/settings.dart';
 import 'package:experiment/services/CategoryService.dart';
 import 'package:experiment/services/OperationsService.dart';

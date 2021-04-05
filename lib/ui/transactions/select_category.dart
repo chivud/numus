@@ -83,6 +83,7 @@ class _CategoriesListWidgetState extends State<CategoriesListWidget>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     Future categories = CategoryService().getByType(widget.type);
     return Container(
       child: FutureBuilder<List<Category>>(

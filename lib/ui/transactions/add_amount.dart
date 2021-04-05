@@ -1,7 +1,6 @@
 import 'package:experiment/constants/date.dart';
 import 'package:experiment/entities/category.dart';
 import 'package:experiment/entities/category_type.dart';
-import 'package:experiment/entities/currency.dart';
 import 'package:experiment/entities/operation.dart';
 import 'package:experiment/entities/settings.dart';
 import 'package:experiment/services/OperationsService.dart';
@@ -125,7 +124,7 @@ class _CalculatorWidgetState extends State<CalculatorWidget> {
 
   void onDonePress() async {
     if (value == '0') {
-      Scaffold.of(context).showSnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           behavior: SnackBarBehavior.floating,
           action: SnackBarAction(
@@ -145,7 +144,7 @@ class _CalculatorWidgetState extends State<CalculatorWidget> {
       Map balance = await operationsService.getTotalBalance();
       double totalSavings = balance['savings'] + amountToAdd;
       if (totalSavings < parsedValue) {
-        Scaffold.of(context).showSnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             behavior: SnackBarBehavior.floating,
             action: SnackBarAction(
@@ -161,11 +160,11 @@ class _CalculatorWidgetState extends State<CalculatorWidget> {
         );
         return;
       }
-    } else if(widget.category.type == expenseType) {
+    } else if (widget.category.type == expenseType) {
       Map balance = await operationsService.getTotalBalance();
       double totalBalance = balance['balance'] + amountToAdd;
       if (totalBalance < parsedValue) {
-        Scaffold.of(context).showSnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             behavior: SnackBarBehavior.floating,
             duration: Duration(seconds: 10),
@@ -379,8 +378,12 @@ class CalculatorKey extends StatelessWidget {
     return Expanded(
       flex: flex,
       child: Container(
+        width: double.infinity,
         margin: EdgeInsets.all(5),
-        child: OutlineButton(
+        child: OutlinedButton(
+          style: OutlinedButton.styleFrom(
+            primary: Colors.black,
+          ),
           child: Text(
             character,
             style: TextStyle(fontSize: 30),
@@ -407,7 +410,10 @@ class DateKey extends StatelessWidget {
     return Expanded(
       child: Container(
         margin: EdgeInsets.all(5),
-        child: OutlineButton(
+        child: OutlinedButton(
+          style: OutlinedButton.styleFrom(
+            primary: Colors.black,
+          ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -444,8 +450,10 @@ class CalculatorAction extends StatelessWidget {
       flex: flex,
       child: Container(
         margin: EdgeInsets.all(5),
-        child: OutlineButton(
-          disabledBorderColor: Colors.green,
+        child: OutlinedButton(
+          style: OutlinedButton.styleFrom(
+            primary: Colors.black,
+          ),
           child: icon,
           onPressed: onPress,
           onLongPress: onLongPress != null ? onLongPress : onPress,

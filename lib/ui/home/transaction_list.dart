@@ -1,6 +1,5 @@
 import 'package:experiment/constants/date.dart';
 import 'package:experiment/entities/category_type.dart';
-import 'package:experiment/entities/currency.dart';
 import 'package:experiment/entities/operation.dart';
 import 'package:experiment/entities/settings.dart';
 import 'package:experiment/services/OperationsService.dart';
@@ -178,8 +177,10 @@ class _TransactionListWidgetState extends State<TransactionListWidget> {
               Container(
                 padding:
                     EdgeInsets.only(left: 20, top: 15, bottom: 5, right: 20),
-                child: OutlineButton(
-                  color: Colors.blue,
+                child: OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    primary: Colors.blue
+                  ),
                   child: Text(
                     getDateText(range),
                     style: TextStyle(fontSize: 14, color: Colors.grey),
