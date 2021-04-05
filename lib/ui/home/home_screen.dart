@@ -1,8 +1,8 @@
-import 'package:experiment/constants/application.dart';
-import 'package:experiment/entities/settings.dart';
-import 'package:experiment/ui/home/balance.dart';
-import 'package:experiment/ui/home/transaction_list.dart';
-import 'package:experiment/ui/transactions/select_category.dart';
+import 'package:numus/constants/application.dart';
+import 'package:numus/entities/settings.dart';
+import 'package:numus/ui/home/balance.dart';
+import 'package:numus/ui/home/transaction_list.dart';
+import 'package:numus/ui/transactions/select_category.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

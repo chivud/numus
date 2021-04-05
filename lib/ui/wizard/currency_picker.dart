@@ -1,7 +1,7 @@
-import 'package:experiment/entities/currency.dart';
-import 'package:experiment/entities/settings.dart';
-import 'package:experiment/services/SharedPreferencesService.dart';
-import 'package:experiment/ui/wizard/start_of_month_picker.dart';
+import 'package:numus/entities/currency.dart';
+import 'package:numus/entities/settings.dart';
+import 'package:numus/services/SharedPreferencesService.dart';
+import 'package:numus/ui/wizard/start_of_month_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

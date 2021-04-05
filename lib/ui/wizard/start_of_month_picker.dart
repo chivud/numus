@@ -1,6 +1,6 @@
-import 'package:experiment/entities/settings.dart';
-import 'package:experiment/services/SharedPreferencesService.dart';
-import 'package:experiment/ui/home/home_screen.dart';
+import 'package:numus/entities/settings.dart';
+import 'package:numus/services/SharedPreferencesService.dart';
+import 'package:numus/ui/home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

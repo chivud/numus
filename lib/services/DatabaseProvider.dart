@@ -1,4 +1,4 @@
-import 'package:experiment/entities/category.dart';
+import 'package:numus/entities/category.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 

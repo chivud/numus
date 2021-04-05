@@ -1,4 +1,4 @@
-import 'package:experiment/entities/category.dart';
+import 'package:numus/entities/category.dart';
 
 class Operation {
   int id;

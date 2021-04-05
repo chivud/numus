@@ -1,4 +1,4 @@
-import 'package:experiment/entities/currency.dart';
+import 'package:numus/entities/currency.dart';
 import 'package:flutter/material.dart';
 
 class Settings extends ChangeNotifier {

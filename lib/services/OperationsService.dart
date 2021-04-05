@@ -1,7 +1,7 @@
-import 'package:experiment/entities/category.dart';
-import 'package:experiment/entities/category_type.dart';
-import 'package:experiment/entities/operation.dart';
-import 'package:experiment/services/DatabaseProvider.dart';
+import 'package:numus/entities/category.dart';
+import 'package:numus/entities/category_type.dart';
+import 'package:numus/entities/operation.dart';
+import 'package:numus/services/DatabaseProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 

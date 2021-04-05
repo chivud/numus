@@ -1,5 +1,5 @@
-import 'package:experiment/entities/category_type.dart';
-import 'package:experiment/services/CategoryService.dart';
+import 'package:numus/entities/category_type.dart';
+import 'package:numus/services/CategoryService.dart';
 import 'package:flutter/material.dart';
 
 /// This is garbage and need to be rewritten.

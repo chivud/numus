@@ -1,4 +1,4 @@
-import 'package:experiment/entities/currency.dart';
+import 'package:numus/entities/currency.dart';
 
 final List<Currency> currencies = [
   Currency(displayName: 'United States dollar', symbol: '\$'),

@@ -1,5 +1,5 @@
-import 'package:experiment/entities/currency.dart';
-import 'package:experiment/entities/settings.dart';
+import 'package:numus/entities/currency.dart';
+import 'package:numus/entities/settings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPreferencesService {

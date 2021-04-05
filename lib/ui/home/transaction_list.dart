@@ -1,9 +1,9 @@
-import 'package:experiment/constants/date.dart';
-import 'package:experiment/entities/category_type.dart';
-import 'package:experiment/entities/operation.dart';
-import 'package:experiment/entities/settings.dart';
-import 'package:experiment/services/OperationsService.dart';
-import 'package:experiment/ui/transactions/edit_transaction.dart';
+import 'package:numus/constants/date.dart';
+import 'package:numus/entities/category_type.dart';
+import 'package:numus/entities/operation.dart';
+import 'package:numus/entities/settings.dart';
+import 'package:numus/services/OperationsService.dart';
+import 'package:numus/ui/transactions/edit_transaction.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';

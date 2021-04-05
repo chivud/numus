@@ -1,8 +1,8 @@
-import 'package:experiment/entities/settings.dart';
-import 'package:experiment/services/DatabaseProvider.dart';
-import 'package:experiment/services/SharedPreferencesService.dart';
-import 'package:experiment/ui/home/home_screen.dart';
-import 'package:experiment/ui/wizard/currency_picker.dart';
+import 'package:numus/entities/settings.dart';
+import 'package:numus/services/DatabaseProvider.dart';
+import 'package:numus/services/SharedPreferencesService.dart';
+import 'package:numus/ui/home/home_screen.dart';
+import 'package:numus/ui/wizard/currency_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';

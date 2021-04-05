@@ -1,5 +1,5 @@
-import 'package:experiment/entities/category.dart';
-import 'package:experiment/entities/category_type.dart';
+import 'package:numus/entities/category.dart';
+import 'package:numus/entities/category_type.dart';
 import 'package:sqflite/sqflite.dart';
 
 import 'DatabaseProvider.dart';

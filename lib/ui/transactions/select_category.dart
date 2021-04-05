@@ -1,10 +1,10 @@
-import 'package:experiment/entities/category.dart';
-import 'package:experiment/entities/category_type.dart';
-import 'package:experiment/entities/operation.dart';
-import 'package:experiment/services/CategoryService.dart';
-import 'package:experiment/services/OperationsService.dart';
-import 'package:experiment/ui/transactions/add_amount.dart';
-import 'package:experiment/ui/transactions/add_category.dart';
+import 'package:numus/entities/category.dart';
+import 'package:numus/entities/category_type.dart';
+import 'package:numus/entities/operation.dart';
+import 'package:numus/services/CategoryService.dart';
+import 'package:numus/services/OperationsService.dart';
+import 'package:numus/ui/transactions/add_amount.dart';
+import 'package:numus/ui/transactions/add_category.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';

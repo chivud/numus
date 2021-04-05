@@ -1,8 +1,8 @@
-import 'package:experiment/entities/category.dart';
-import 'package:experiment/entities/settings.dart';
-import 'package:experiment/services/CategoryService.dart';
-import 'package:experiment/services/OperationsService.dart';
-import 'package:experiment/ui/transactions/add_amount.dart';
+import 'package:numus/entities/category.dart';
+import 'package:numus/entities/settings.dart';
+import 'package:numus/services/CategoryService.dart';
+import 'package:numus/services/OperationsService.dart';
+import 'package:numus/ui/transactions/add_amount.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
