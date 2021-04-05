@@ -52,7 +52,7 @@ class _CurrencyPickerWidgetState extends State<CurrencyPickerWidget> {
     Settings settings = Provider.of<Settings>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Pick your currency'),
+        title: Text('Pick your currency', key: Key('currency_title'),),
       ),
       body: Column(
         children: [
@@ -67,6 +67,7 @@ class _CurrencyPickerWidgetState extends State<CurrencyPickerWidget> {
           ),
           Expanded(
             child: ListView.builder(
+              key: Key('currency_list'),
               shrinkWrap: true,
               itemCount: filteredList.length,
               itemBuilder: (context, index) {
