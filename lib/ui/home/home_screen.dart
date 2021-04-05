@@ -19,7 +19,9 @@ class HomeScreen extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               BalanceWidget(),
-              Expanded(child: TransactionListWidget(settings.startOfMonth),)
+              Expanded(
+                child: TransactionListWidget(settings.startOfMonth),
+              )
             ],
           )),
       floatingActionButton: SizedBox(
@@ -39,18 +41,22 @@ class HomeScreen extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            FlatButton(
-              padding: EdgeInsets.all(10),
-              shape: CircleBorder(),
+            TextButton(
+              style: TextButton.styleFrom(
+                  shape: CircleBorder(),
+                  padding: EdgeInsets.all(10),
+                  primary: Colors.black),
               onPressed: () {},
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [Icon(Icons.bar_chart), Text('label')],
               ),
             ),
-            FlatButton(
-              padding: EdgeInsets.all(10),
-              shape: CircleBorder(),
+            TextButton(
+              style: TextButton.styleFrom(
+                  shape: CircleBorder(),
+                  padding: EdgeInsets.all(10),
+                  primary: Colors.black),
               onPressed: () {},
               child: Column(
                 mainAxisSize: MainAxisSize.min,
