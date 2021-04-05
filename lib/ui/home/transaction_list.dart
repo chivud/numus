@@ -36,7 +36,7 @@ class _TransactionListWidgetState extends State<TransactionListWidget> {
         ? DateTime(now.year, now.month, widget.startOfMonth, 0)
         : DateTime(now.year, now.month - 1, widget.startOfMonth, 0);
     DateTime endDate =
-        DateTime(startDate.year, startDate.month + 1, startDate.day - 1, 24);
+        DateTime(startDate.year, startDate.month + 1, startDate.day, 23, 59);
     return DateTimeRange(start: startDate, end: endDate);
   }
 
