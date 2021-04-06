@@ -13,9 +13,6 @@ import 'package:provider/provider.dart';
 enum DateMode { month, range, all }
 
 class TransactionListWidget extends StatefulWidget {
-  final int startOfMonth;
-
-  TransactionListWidget(this.startOfMonth);
 
   @override
   _TransactionListWidgetState createState() => _TransactionListWidgetState();
@@ -28,19 +25,19 @@ class _TransactionListWidgetState extends State<TransactionListWidget> {
   final DateFormat dateFormatter = DateFormat(dateFormat);
   final PagingController<int, Operation> pagingController =
       PagingController(firstPageKey: 0);
+  int startOfMonth = 1;
 
   DateTimeRange getTimeRange({selectedDate}) {
     DateTime now = selectedDate != null ? selectedDate : DateTime.now();
-    DateTime startDate = now.day > widget.startOfMonth
-        ? DateTime(now.year, now.month, widget.startOfMonth, 0)
-        : DateTime(now.year, now.month - 1, widget.startOfMonth, 0);
+    DateTime startDate = now.day > startOfMonth
+        ? DateTime(now.year, now.month, startOfMonth, 0)
+        : DateTime(now.year, now.month - 1, startOfMonth, 0);
     DateTime endDate =
         DateTime(startDate.year, startDate.month + 1, startDate.day, 23, 59);
     return DateTimeRange(start: startDate, end: endDate);
   }
 
   initState() {
-    range = getTimeRange(selectedDate: null);
     pagingController.addPageRequestListener((pageKey) {
       fetchPage(pageKey);
     });
@@ -158,6 +155,8 @@ class _TransactionListWidgetState extends State<TransactionListWidget> {
   @override
   Widget build(BuildContext context) {
     Settings settings = Provider.of<Settings>(context);
+    startOfMonth = settings.startOfMonth;
+    range = getTimeRange(selectedDate: null);
     final DateFormat formatter = DateFormat(dateTimeFormat);
     return Card(
       child: Column(

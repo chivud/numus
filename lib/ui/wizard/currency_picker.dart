@@ -7,8 +7,9 @@ import 'package:provider/provider.dart';
 
 class CurrencyPickerWidget extends StatefulWidget {
   final List<Currency> currencies;
+  final bool isInWizard;
 
-  CurrencyPickerWidget(this.currencies);
+  CurrencyPickerWidget(this.currencies, {this.isInWizard = true});
 
   @override
   _CurrencyPickerWidgetState createState() => _CurrencyPickerWidgetState();
@@ -42,8 +43,14 @@ class _CurrencyPickerWidgetState extends State<CurrencyPickerWidget> {
           displayName: filteredList[index].displayName,
           symbol: filteredList[index].symbol);
       settings.setCurrency(currency);
-      return Navigator.push(context,
-          MaterialPageRoute(builder: (context) => StartOfMonthPickerWidget()));
+      if (widget.isInWizard) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => StartOfMonthPickerWidget()));
+      } else {
+        Navigator.pop(context);
+      }
     });
   }
 
@@ -52,7 +59,10 @@ class _CurrencyPickerWidgetState extends State<CurrencyPickerWidget> {
     Settings settings = Provider.of<Settings>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Pick your currency', key: Key('currency_title'),),
+        title: Text(
+          'Pick your currency',
+          key: Key('currency_title'),
+        ),
       ),
       body: Column(
         children: [

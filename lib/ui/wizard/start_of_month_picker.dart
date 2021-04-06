@@ -5,6 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class StartOfMonthPickerWidget extends StatefulWidget {
+  final bool isInWizard;
+
+  StartOfMonthPickerWidget({this.isInWizard = true});
+
   @override
   _StartOfMonthPickerWidgetState createState() =>
       _StartOfMonthPickerWidgetState();
@@ -17,14 +21,16 @@ class _StartOfMonthPickerWidgetState extends State<StartOfMonthPickerWidget> {
   void saveValue(Settings settings) {
     if (_formKey.currentState.validate()) {
       int parsedValue = int.parse(_textFiledController.text);
-      SharedPreferencesService()
-          .setStartOfMonth(parsedValue)
-          .then((value) {
-            settings.setStartOfMonth(parsedValue);
-            return Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => HomeScreen()),
-                (Route<dynamic> route) => false);
+      SharedPreferencesService().setStartOfMonth(parsedValue).then((value) {
+        settings.setStartOfMonth(parsedValue);
+        if (widget.isInWizard) {
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => HomeScreen()),
+              (Route<dynamic> route) => false);
+        } else {
+          Navigator.pop(context);
+        }
       });
     }
   }
