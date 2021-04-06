@@ -1,12 +1,11 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:numus/constants/application.dart';
-import 'package:numus/entities/settings.dart';
+import 'package:numus/ui/charts/charts.dart';
 import 'package:numus/ui/home/balance.dart';
 import 'package:numus/ui/home/transaction_list.dart';
 import 'package:numus/ui/settings/settings.dart';
 import 'package:numus/ui/transactions/select_category.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -46,10 +45,15 @@ class HomeScreen extends StatelessWidget {
                   shape: CircleBorder(),
                   padding: EdgeInsets.all(10),
                   primary: Colors.black),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ChartsWidget()));
+              },
               child: Column(
                 mainAxisSize: MainAxisSize.min,
-                children: [Icon(Icons.bar_chart), Text('label')],
+                children: [Icon(Icons.pie_chart), Text('Charts')],
               ),
             ),
             TextButton(
