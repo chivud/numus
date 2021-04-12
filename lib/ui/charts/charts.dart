@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:numus/entities/category_type.dart';
 import 'package:numus/entities/charts/operations_summary.dart';
 import 'package:numus/entities/settings.dart';
-import 'package:numus/services/OperationsService.dart';
+import 'package:numus/services/ChartService.dart';
 import 'package:numus/ui/charts/operation_piechart.dart';
 import 'package:numus/ui/common/daterange_button.dart';
 import 'package:provider/provider.dart';
@@ -81,12 +81,12 @@ class _ChartsWidgetState extends State<ChartsWidget> {
               scrollDirection: Axis.vertical,
               children: [
                 FutureBuilder(
-                  future: OperationsService()
+                  future: ChartService()
                       .getSummaryByCategoryType(mode == DateMode.all ? null : range, expenseType),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     List<OperationSummary> list = snapshot.data as List<OperationSummary>;
                     if (list != null) {
-                      return ChartWidget(
+                      return TotalExpensesChart(
                           expenseType, range, list, settings);
                     }
                     return Text('loading...');
@@ -101,13 +101,13 @@ class _ChartsWidgetState extends State<ChartsWidget> {
   }
 }
 
-class ChartWidget extends StatelessWidget {
+class TotalExpensesChart extends StatelessWidget {
   final CategoryType categoryType;
   final DateTimeRange range;
   final List<OperationSummary> items;
   final Settings settings;
 
-  ChartWidget(this.categoryType, this.range, this.items, this.settings);
+  TotalExpensesChart(this.categoryType, this.range, this.items, this.settings);
 
   @override
   Widget build(BuildContext context) {
@@ -123,7 +123,7 @@ class ChartWidget extends StatelessWidget {
                   Container(
                     padding: EdgeInsets.only(left: 20, top: 15, bottom: 5),
                     child: Text(
-                      categoryType.name,
+                      'Total Expenses',
                       style: TextStyle(fontSize: 14, color: Colors.grey),
                     ),
                   ),
