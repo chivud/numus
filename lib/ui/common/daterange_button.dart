@@ -13,9 +13,10 @@ class DateRangeButtonWidget extends StatelessWidget {
   final afterShowAll;
   final afterSelectMonth;
   final afterShowDateRange;
+  final Color textColor;
 
 
-  DateRangeButtonWidget(this.context, this.mode, this.range, this.afterShowAll, this.afterSelectMonth, this.afterShowDateRange);
+  DateRangeButtonWidget(this.context, this.mode, this.range, this.afterShowAll, this.afterSelectMonth, this.afterShowDateRange, {this.textColor = Colors.grey});
 
   String getDateText(DateTimeRange range) {
     if (mode == DateMode.all) {
@@ -89,7 +90,7 @@ class DateRangeButtonWidget extends StatelessWidget {
       ),
       child: Text(
         getDateText(range),
-        style: TextStyle(fontSize: 14, color: Colors.grey),
+        style: TextStyle(fontSize: 14, color: textColor),
       ),
       onPressed: showDateMenu,
     );
