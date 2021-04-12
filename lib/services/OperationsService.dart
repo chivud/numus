@@ -1,9 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:numus/entities/category.dart';
 import 'package:numus/entities/category_type.dart';
-import 'package:numus/entities/charts/operations_summary.dart';
 import 'package:numus/entities/operation.dart';
 import 'package:numus/services/DatabaseProvider.dart';
-import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 
 class OperationsService {
@@ -13,27 +12,31 @@ class OperationsService {
     await db.insert('operations', operation.toMap());
   }
 
-  Future<Map<String, double>> getTotalBalance() async {
+  Future<Map<String, double>> getTotalBalance(DateTime date) async {
     Database db = await DatabaseProvider().database;
 
     List<Map> expenses =
         await db.rawQuery("SELECT TOTAL(amount) as sum FROM operations "
             "JOIN categories ON categories.id = operations.category_id "
-            "WHERE categories.type = 'expense'");
+            "WHERE categories.type = 'expense' "
+            "AND operations.created_at < ?", [date.millisecondsSinceEpoch]);
     List<Map> income =
         await db.rawQuery("SELECT TOTAL(amount) as sum FROM operations "
             "JOIN categories ON categories.id = operations.category_id "
-            "WHERE categories.type = 'income'");
+            "WHERE categories.type = 'income' "
+            "AND operations.created_at < ?", [date.millisecondsSinceEpoch]);
 
     List<Map> savings =
         await db.rawQuery("SELECT TOTAL(amount) as sum FROM operations "
             "JOIN categories ON categories.id = operations.category_id "
-            "WHERE categories.type = 'savings'");
+            "WHERE categories.type = 'savings' "
+            "AND operations.created_at < ?", [date.millisecondsSinceEpoch]);
 
     List<Map> withdraw =
         await db.rawQuery("SELECT TOTAL(amount) as sum FROM operations "
             "JOIN categories ON categories.id = operations.category_id "
-            "WHERE categories.type = 'withdraw'");
+            "WHERE categories.type = 'withdraw' "
+            "AND operations.created_at < ?", [date.millisecondsSinceEpoch]);
     var incomeSum = income.first['sum'];
     var expensesSum = expenses.first['sum'];
     var savingsSum = savings.first['sum'];

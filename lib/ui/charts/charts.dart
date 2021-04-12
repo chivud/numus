@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:numus/entities/category_type.dart';
 import 'package:numus/entities/charts/operations_summary.dart';
+import 'package:numus/entities/charts/type_summary.dart';
 import 'package:numus/entities/settings.dart';
 import 'package:numus/services/ChartService.dart';
+import 'package:numus/ui/charts/operation_chart.dart';
+import 'package:numus/ui/charts/operation_linechart.dart';
 import 'package:numus/ui/charts/operation_piechart.dart';
 import 'package:numus/ui/common/daterange_button.dart';
 import 'package:provider/provider.dart';
@@ -81,13 +84,38 @@ class _ChartsWidgetState extends State<ChartsWidget> {
               scrollDirection: Axis.vertical,
               children: [
                 FutureBuilder(
-                  future: ChartService()
-                      .getSummaryByCategoryType(mode == DateMode.all ? null : range, expenseType),
+                  future: ChartService().getSummaryByCategoryType(
+                      mode == DateMode.all ? null : range, expenseType),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
-                    List<OperationSummary> list = snapshot.data as List<OperationSummary>;
+                    List<OperationSummary> list =
+                        snapshot.data as List<OperationSummary>;
                     if (list != null) {
-                      return TotalExpensesChart(
-                          expenseType, range, list, settings);
+                      return ChartCard(
+                          OperationPieChart(list, expenseType.tag, settings),
+                          'Total Expenses');
+                    }
+                    return Text('loading...');
+                  },
+                ),
+                FutureBuilder(
+                  future: ChartService().getTypeSummary(
+                    mode != DateMode.all ? range : null,
+                  ),
+                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    Map<String, List> data = snapshot.data;
+                    if (data != null) {
+                      return Column(
+                        children: [
+                          Expanded(
+                            child: ChartCard(OperationLineChart(data['income'], 'income'),
+                                'Income burnout'),
+                          ),
+                          Expanded(
+                            child: ChartCard(OperationLineChart(data['savings'], 'savings'),
+                                'Savings'),
+                          ),
+                        ],
+                      );
                     }
                     return Text('loading...');
                   },
@@ -101,13 +129,11 @@ class _ChartsWidgetState extends State<ChartsWidget> {
   }
 }
 
-class TotalExpensesChart extends StatelessWidget {
-  final CategoryType categoryType;
-  final DateTimeRange range;
-  final List<OperationSummary> items;
-  final Settings settings;
+class ChartCard extends StatelessWidget {
+  final OperationChart operationChart;
+  final String title;
 
-  TotalExpensesChart(this.categoryType, this.range, this.items, this.settings);
+  ChartCard(this.operationChart, this.title);
 
   @override
   Widget build(BuildContext context) {
@@ -123,14 +149,13 @@ class TotalExpensesChart extends StatelessWidget {
                   Container(
                     padding: EdgeInsets.only(left: 20, top: 15, bottom: 5),
                     child: Text(
-                      'Total Expenses',
+                      title,
                       style: TextStyle(fontSize: 14, color: Colors.grey),
                     ),
                   ),
                   Divider(),
                   Expanded(
-                    child: OperationPieChart(
-                        this.items, categoryType.tag, settings),
+                    child: operationChart,
                   ),
                 ],
               ),

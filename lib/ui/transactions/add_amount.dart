@@ -141,7 +141,7 @@ class _CalculatorWidgetState extends State<CalculatorWidget> {
     OperationsService operationsService = OperationsService();
     double amountToAdd = widget.operation != null ? widget.operation.amount : 0;
     if (widget.category.type == withdrawType) {
-      Map balance = await operationsService.getTotalBalance();
+      Map balance = await operationsService.getTotalBalance(distantFutureDate);
       double totalSavings = balance['savings'] + amountToAdd;
       if (totalSavings < parsedValue) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -161,7 +161,7 @@ class _CalculatorWidgetState extends State<CalculatorWidget> {
         return;
       }
     } else if (widget.category.type == expenseType) {
-      Map balance = await operationsService.getTotalBalance();
+      Map balance = await operationsService.getTotalBalance(distantFutureDate);
       double totalBalance = balance['balance'] + amountToAdd;
       if (totalBalance < parsedValue) {
         ScaffoldMessenger.of(context).showSnackBar(

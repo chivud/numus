@@ -1,3 +1,4 @@
+import 'package:numus/constants/date.dart';
 import 'package:numus/entities/category.dart';
 import 'package:numus/entities/settings.dart';
 import 'package:numus/services/CategoryService.dart';
@@ -28,7 +29,7 @@ class _BalanceWidgetState extends State<BalanceWidget> {
   Widget build(BuildContext context) {
     Settings settings = Provider.of<Settings>(context);
     return FutureBuilder(
-        future: OperationsService().getTotalBalance(),
+        future: OperationsService().getTotalBalance(distantFutureDate),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           double totalBalance = 0;
           double savings = 0;

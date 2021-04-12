@@ -2,8 +2,9 @@ import 'package:charts_flutter/flutter.dart' as Charts;
 import 'package:flutter/material.dart';
 import 'package:numus/entities/charts/operations_summary.dart';
 import 'package:numus/entities/settings.dart';
+import 'package:numus/ui/charts/operation_chart.dart';
 
-class OperationPieChart extends StatelessWidget {
+class OperationPieChart extends OperationChart{
   final List<OperationSummary> list;
   final String id;
   final Settings settings;
