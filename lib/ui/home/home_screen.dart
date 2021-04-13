@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:numus/constants/application.dart';
 import 'package:numus/ui/charts/charts.dart';
 import 'package:numus/ui/home/balance.dart';
 import 'package:numus/ui/home/transaction_list.dart';

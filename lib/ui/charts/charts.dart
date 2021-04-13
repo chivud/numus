@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:numus/entities/category_type.dart';
 import 'package:numus/entities/charts/operations_summary.dart';
-import 'package:numus/entities/charts/type_summary.dart';
 import 'package:numus/entities/settings.dart';
 import 'package:numus/services/ChartService.dart';
 import 'package:numus/ui/charts/operation_chart.dart';

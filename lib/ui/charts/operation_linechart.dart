@@ -6,8 +6,8 @@ import 'package:intl/intl.dart';
 import 'package:numus/constants/date.dart';
 import 'package:numus/entities/charts/type_summary.dart';
 import 'package:numus/ui/charts/operation_chart.dart';
-import 'package:charts_flutter/src/text_element.dart';
-import 'package:charts_flutter/src/text_style.dart' as style;
+import 'package:charts_flutter/src/text_element.dart'; // ignore: implementation_imports
+import 'package:charts_flutter/src/text_style.dart' as style; // ignore: implementation_imports
 
 class OperationLineChart extends OperationChart {
   final List<TypeSummary> list;
