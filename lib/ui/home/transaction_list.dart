@@ -138,7 +138,7 @@ class _TransactionListWidgetState extends State<TransactionListWidget> {
                   title: Text('There are no operations yet..'),
                   onTap: () {},
                 );
-              }, itemBuilder: (context, operation, index) {
+              }, itemBuilder: (context, Operation operation, index) {
                 return ListTile(
                   contentPadding: EdgeInsets.all(0),
                   leading: Container(

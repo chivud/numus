@@ -9,10 +9,30 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class SelectCategoryWidget extends StatelessWidget {
+class SelectCategoryWidget extends StatefulWidget {
   final Operation operation;
 
-  const SelectCategoryWidget({Key key, this.operation}) : super(key: key);
+  SelectCategoryWidget({this.operation});
+
+  @override
+  _SelectCategoryWidgetState createState() => _SelectCategoryWidgetState();
+}
+
+class _SelectCategoryWidgetState extends State<SelectCategoryWidget>
+    with SingleTickerProviderStateMixin {
+  bool editMode = false;
+
+  AnimationController animationController;
+
+  @override
+  void initState() {
+    animationController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 500));
+  }
+
+  changeEditMode() {
+    editMode = !editMode;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +41,11 @@ class SelectCategoryWidget extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: Text('Select category'),
+          actions: [
+            IconButton(
+                icon: Icon(editMode ? Icons.done : Icons.edit),
+                onPressed: () => setState(changeEditMode)),
+          ],
           bottom: TabBar(
             tabs: [
               Tab(text: expenseType.name.toUpperCase()),
@@ -32,15 +57,18 @@ class SelectCategoryWidget extends StatelessWidget {
         body: TabBarView(children: [
           CategoriesListWidget(
             expenseType,
-            operation: operation,
+            editMode,
+            operation: widget.operation,
           ),
           CategoriesListWidget(
             incomeType,
-            operation: operation,
+            editMode,
+            operation: widget.operation,
           ),
           CategoriesListWidget(
             savingType,
-            operation: operation,
+            editMode,
+            operation: widget.operation,
           ),
         ]),
       ),
@@ -52,7 +80,9 @@ class CategoriesListWidget extends StatefulWidget {
   final CategoryType type;
   final Operation operation;
 
-  CategoriesListWidget(this.type, {this.operation});
+  final bool editMode;
+
+  CategoriesListWidget(this.type, this.editMode, {this.operation});
 
   @override
   _CategoriesListWidgetState createState() => _CategoriesListWidgetState();
@@ -79,6 +109,17 @@ class _CategoriesListWidgetState extends State<CategoriesListWidget>
         Navigator.pop(context);
       });
     }
+  }
+
+  removeCategory(Category category) async {}
+
+  editCategory(Category category) async {
+    await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                AddCategoryWidget(widget.type, category: category)));
+    refreshList();
   }
 
   @override
@@ -109,6 +150,19 @@ class _CategoriesListWidgetState extends State<CategoriesListWidget>
                     onTap: () {
                       onSelectCategory(category);
                     },
+                    trailing: widget.editMode
+                        ? Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                  icon: Icon(Icons.delete),
+                                  onPressed: () => removeCategory(category)),
+                              IconButton(
+                                  icon: Icon(Icons.edit),
+                                  onPressed: () => editCategory(category)),
+                            ],
+                          )
+                        : null,
                   ),
                 )
                 .toList();

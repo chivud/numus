@@ -1,12 +1,25 @@
+import 'package:numus/entities/category.dart';
 import 'package:numus/entities/category_type.dart';
 import 'package:numus/services/CategoryService.dart';
 import 'package:flutter/material.dart';
 
+const List<Color> colors = [
+  Colors.green,
+  Colors.red,
+  Colors.amber,
+  Colors.blueGrey,
+  Colors.purple,
+  Colors.deepOrange,
+];
+
+const Color initialColor = Colors.green;
+
 /// This is garbage and need to be rewritten.
 class AddCategoryWidget extends StatefulWidget {
   final CategoryType categoryType;
+  final Category category;
 
-  AddCategoryWidget(this.categoryType);
+  AddCategoryWidget(this.categoryType, {this.category});
 
   @override
   _AddCategoryWidgetState createState() => _AddCategoryWidgetState();
@@ -15,7 +28,7 @@ class AddCategoryWidget extends StatefulWidget {
 class _AddCategoryWidgetState extends State<AddCategoryWidget> {
   final _formKey = GlobalKey<FormState>();
 
-  Icon icon = Icon(Icons.attach_money);
+  Icon icon;
 
   ColorPickerWidget selectedColorPicker;
 
@@ -24,24 +37,54 @@ class _AddCategoryWidgetState extends State<AddCategoryWidget> {
   final textFieldController = TextEditingController();
 
   void addCategory(String categoryName, int icon, int color) {
-    CategoryService()
-        .createCategory(widget.categoryType, categoryName, icon, color)
-        .then((value) => Navigator.pop(context, ));
+    if (widget.category == null) {
+      CategoryService()
+          .createCategory(widget.categoryType, categoryName, icon, color)
+          .then((value) => Navigator.pop(
+                context,
+              ));
+    } else {
+      widget.category.name = categoryName;
+      widget.category.icon = icon;
+      widget.category.color = color;
+      CategoryService()
+          .editCategory(widget.category)
+          .then((value) => Navigator.pop(
+                context,
+              ));
+    }
   }
 
   @override
   void initState() {
-    colorPickers = [
-      ColorPickerWidget(Colors.green, changeSelectedColorPicker,
-          selected: true),
-      ColorPickerWidget(Colors.red, changeSelectedColorPicker),
-      ColorPickerWidget(Colors.blue, changeSelectedColorPicker),
-      ColorPickerWidget(Colors.amber, changeSelectedColorPicker),
-      ColorPickerWidget(Colors.blueGrey, changeSelectedColorPicker),
-      ColorPickerWidget(Colors.purple, changeSelectedColorPicker),
-      ColorPickerWidget(Colors.deepOrange, changeSelectedColorPicker),
-    ];
-    selectedColorPicker = colorPickers.first;
+    colorPickers = colors.map((Color color) {
+      if (widget.category == null) {
+        if (color.hashCode == initialColor.hashCode) {
+          selectedColorPicker =  ColorPickerWidget(
+            color,
+            changeSelectedColorPicker,
+            selected: true,
+          );
+          return selectedColorPicker;
+        }
+        return ColorPickerWidget(color, changeSelectedColorPicker);
+      }
+
+      if(Color(widget.category.color).value == color.value){
+        selectedColorPicker = ColorPickerWidget(
+          color,
+          changeSelectedColorPicker,
+          selected: true,
+        );
+        return selectedColorPicker;
+      }
+      return ColorPickerWidget(color, changeSelectedColorPicker);
+
+    }).toList();
+    textFieldController.text =
+        widget.category != null ? widget.category.name : null;
+    icon = widget.category != null ? Icon(IconData(widget.category.icon,
+        fontFamily: 'MaterialIcons')) : Icon(Icons.attach_money);
     super.initState();
   }
 
@@ -109,8 +152,10 @@ class _AddCategoryWidgetState extends State<AddCategoryWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:
-            Text('Add ' + widget.categoryType.name.toLowerCase() + ' category'),
+        title: widget.category == null
+            ? Text(
+                'Add ' + widget.categoryType.name.toLowerCase() + ' category')
+            : Text('Edit ' + widget.category.name + ' category'),
         actions: [
           IconButton(
               icon: Icon(Icons.done),
