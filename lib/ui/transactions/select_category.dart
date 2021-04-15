@@ -111,7 +111,57 @@ class _CategoriesListWidgetState extends State<CategoriesListWidget>
     }
   }
 
-  removeCategory(Category category) async {}
+  removeCategory(Category category) async {
+    bool hasTransactions =
+        await CategoryService().categoryHasTransactions(category);
+    await showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Remove category'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(hasTransactions
+                    ? 'This category cannot be removed because it has transactions attached. Please edit it if you want to change something.'
+                    : 'Are you sure do you want to completely remove this category?'),
+              ],
+            ),
+          ),
+          actions: hasTransactions
+              ? [
+                  TextButton(
+                    child: Text('OK'),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ]
+              : [
+                  TextButton(
+                    child: Text(
+                      'Remove',
+                      style: TextStyle(color: Colors.red),
+                    ),
+                    onPressed: () {
+                      CategoryService().removeCategory(category).then((value) {
+                        refreshList();
+                        return Navigator.of(context).pop();
+                      });
+                    },
+                  ),
+                  TextButton(
+                    child: Text('Cancel'),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+        );
+      },
+    );
+  }
 
   editCategory(Category category) async {
     await Navigator.push(
