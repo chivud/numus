@@ -5,16 +5,31 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="738.55621"
    height="251.18111"
    viewBox="0 0 195.40966 66.458336"
    version="1.1"
-   id="svg8">
+   id="svg8"
+   inkscape:export-filename="/home/dchivu/projects/flutter/numus/numus/logo/bitmap_medium.png"
+   inkscape:export-xdpi="45.24345"
+   inkscape:export-ydpi="45.24345"
+   inkscape:version="1.0.2 (394de47547, 2021-03-26)"
+   sodipodi:docname="drawing_ink.svg">
   <defs
      id="defs2">
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="-18.073187 : 173.46497 : 1"
+       inkscape:vp_y="0 : 1000.0001 : 0"
+       inkscape:vp_z="191.92682 : 173.46497 : 1"
+       inkscape:persp3d-origin="86.926818 : 123.96497 : 1"
+       id="perspective338" />
     <font
        horiz-adv-x="1136"
        id="font368"
+       inkscape:label="font 1"
        horiz-origin-x="0"
        horiz-origin-y="0"
        vert-origin-x="512"
@@ -29,6 +44,30 @@
          id="missing-glyph372" />
     </font>
   </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.4"
+     inkscape:cx="346.78548"
+     inkscape:cy="134.11479"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     inkscape:document-rotation="0"
+     showgrid="false"
+     inkscape:window-width="1848"
+     inkscape:window-height="1043"
+     inkscape:window-x="1992"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     units="px"
+     fit-margin-top="50"
+     fit-margin-left="50"
+     fit-margin-right="50"
+     fit-margin-bottom="50" />
   <metadata
      id="metadata5">
     <rdf:RDF>
@@ -37,11 +76,13 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
   <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
      id="layer1"
      transform="translate(-9.2231005,1.0022925)">
     <g
@@ -49,18 +90,23 @@
        transform="translate(1.4178948,-47.304372)">
       <g
          id="layer3"
+         inkscape:label="Layer 3"
          style="display:inline">
         <rect
            style="fill:#08ad23;fill-opacity:1;stroke-width:0.243142"
            id="rect318"
            width="40"
            height="40"
-           x="21.034372"
+           x="21.56354"
            y="59.531246"
-           ry="4.873569" />
+           ry="4.873569"
+           inkscape:export-filename="/home/dchivu/Desktop/rect318.png"
+           inkscape:export-xdpi="650.23999"
+           inkscape:export-ydpi="650.23999" />
       </g>
       <g
          id="layer2"
+         inkscape:label="Layer 2"
          style="display:inline">
         <g
            aria-label="numus"
@@ -86,7 +132,8 @@
         </g>
       </g>
       <g
-         id="layer4">
+         id="layer4"
+         inkscape:label="Layer 4">
         <path
            d="m 44.052882,65.551412 q 3.7592,0 5.6896,1.5748 1.9812,1.5748 2.6924,4.2164 0.762,2.5908 0.762,5.7912 v 13.004802 q 0,1.3208 -0.8636,2.2352 -0.8636,0.8636 -2.1844,0.8636 -1.3208,0 -2.1844,-0.8636 -0.8636,-0.9144 -0.8636,-2.2352 V 77.133812 q 0,-1.6764 -0.4572,-2.9972 -0.4064,-1.3716 -1.524,-2.1844 -1.1176,-0.8128 -3.2004,-0.8128 -2.032,0 -3.4544,0.8128 -1.3716,0.8128 -2.1336,2.1844 -0.7112,1.3208 -0.7112,2.9972 v 13.004802 q 0,1.3208 -0.8636,2.2352 -0.8636,0.8636 -2.1844,0.8636 -1.3208,0 -2.1844,-0.8636 -0.8636,-0.9144 -0.8636,-2.2352 V 69.158212 q 0,-1.3208 0.8636,-2.1844 0.8636,-0.9144 2.1844,-0.9144 1.3208,0 2.1844,0.9144 0.8636,0.8636 0.8636,2.1844 v 2.1844 l -0.762,-0.1524 q 0.4572,-0.8636 1.3208,-1.8288 0.8636,-1.016 2.032,-1.8796 1.1684,-0.8636 2.6416,-1.3716 1.4732,-0.5588 3.2004,-0.5588 z"
            style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:50.8px;line-height:1.25;font-family:quicksand;-inkscape-font-specification:'quicksand Bold';display:inline;fill:#ffffff;stroke-width:0.264583"
