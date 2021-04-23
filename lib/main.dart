@@ -5,6 +5,7 @@ import 'package:numus/ui/home/home_screen.dart';
 import 'package:numus/ui/wizard/currency_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:numus/ui/wizard/get_started.dart';
 import 'package:provider/provider.dart';
 
 import 'constants/application.dart';
@@ -18,7 +19,7 @@ void main() async {
   if (settings.startOfMonth != null && settings.currency != null) {
     first = HomeScreen();
   } else {
-    first = CurrencyPickerWidget(currencies);
+    first = GetStartedWidget();
   }
   runApp(MyApp(first, settings: settings,));
 }
@@ -40,7 +41,7 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: appName,
           theme: ThemeData(
-            primarySwatch: Colors.blue,
+            primarySwatch: Colors.green,
             visualDensity: VisualDensity.adaptivePlatformDensity,
           ),
           home: first),
