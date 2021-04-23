@@ -113,19 +113,23 @@ class _TransactionListWidgetState extends State<TransactionListWidget> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                padding: EdgeInsets.only(left: 20, top: 15, bottom: 5),
+                padding: EdgeInsets.only(left: 20, top: 10, bottom: 5),
                 child: Text(
                   'Transaction list',
                   style: TextStyle(fontSize: 14, color: Colors.grey),
                 ),
               ),
+
               Container(
                 padding:
-                    EdgeInsets.only(left: 20, top: 15, bottom: 5, right: 20),
+                    EdgeInsets.only(left: 20, top: 10, bottom: 5, right: 20),
                 child: DateRangeButtonWidget(
                     context, mode, range, showAll, selectMonth, showDateRange),
               ),
             ],
+          ),
+          Divider(
+            height: 1,
           ),
           Expanded(
             child: PagedListView(
