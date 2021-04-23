@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.themachinedev.numus">
+    package="com.themachine.numus">
    <application
         android:label="numus"
         android:icon="@mipmap/numus_launcher">
