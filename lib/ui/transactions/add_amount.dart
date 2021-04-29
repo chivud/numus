@@ -160,7 +160,7 @@ class _CalculatorWidgetState extends State<CalculatorWidget> {
         );
         return;
       }
-    } else if (widget.category.type == expenseType) {
+    } else if (widget.category.type == expenseType || widget.category.type == savingType) {
       Map balance = await operationsService.getTotalBalance(distantFutureDate);
       double totalBalance = balance['balance'] + amountToAdd;
       if (totalBalance < parsedValue) {
