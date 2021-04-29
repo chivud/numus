@@ -1,16 +1,9 @@
+import 'package:flutter/services.dart';
 import 'package:numus/entities/category.dart';
 import 'package:numus/entities/category_type.dart';
 import 'package:numus/services/CategoryService.dart';
 import 'package:flutter/material.dart';
-
-const List<Color> colors = [
-  Colors.green,
-  Colors.red,
-  Colors.amber,
-  Colors.blueGrey,
-  Colors.purple,
-  Colors.deepOrange,
-];
+import 'package:numus/constants/icons.dart';
 
 const Color initialColor = Colors.green;
 
@@ -57,10 +50,10 @@ class _AddCategoryWidgetState extends State<AddCategoryWidget> {
 
   @override
   void initState() {
-    colorPickers = colors.map((Color color) {
+    colorPickers = iconColors.map((Color color) {
       if (widget.category == null) {
         if (color.hashCode == initialColor.hashCode) {
-          selectedColorPicker =  ColorPickerWidget(
+          selectedColorPicker = ColorPickerWidget(
             color,
             changeSelectedColorPicker,
             selected: true,
@@ -70,7 +63,7 @@ class _AddCategoryWidgetState extends State<AddCategoryWidget> {
         return ColorPickerWidget(color, changeSelectedColorPicker);
       }
 
-      if(Color(widget.category.color).value == color.value){
+      if (Color(widget.category.color).value == color.value) {
         selectedColorPicker = ColorPickerWidget(
           color,
           changeSelectedColorPicker,
@@ -79,12 +72,12 @@ class _AddCategoryWidgetState extends State<AddCategoryWidget> {
         return selectedColorPicker;
       }
       return ColorPickerWidget(color, changeSelectedColorPicker);
-
     }).toList();
     textFieldController.text =
         widget.category != null ? widget.category.name : null;
-    icon = widget.category != null ? Icon(IconData(widget.category.icon,
-        fontFamily: 'MaterialIcons')) : Icon(Icons.attach_money);
+    icon = widget.category != null
+        ? Icon(IconData(widget.category.icon, fontFamily: 'MaterialIcons'))
+        : Icon(Icons.attach_money);
     super.initState();
   }
 
@@ -117,32 +110,12 @@ class _AddCategoryWidgetState extends State<AddCategoryWidget> {
           return Container(
             child: GridView.count(
               crossAxisCount: 5,
-              children: [
-                IconWidget(Icon(Icons.account_balance),
-                    selectedColorPicker.color, selectIcon),
-                IconWidget(Icon(Icons.bug_report), selectedColorPicker.color,
-                    selectIcon),
-                IconWidget(
-                    Icon(Icons.build), selectedColorPicker.color, selectIcon),
-                IconWidget(
-                    Icon(Icons.commute), selectedColorPicker.color, selectIcon),
-                IconWidget(Icon(Icons.credit_card), selectedColorPicker.color,
-                    selectIcon),
-                IconWidget(
-                    Icon(Icons.eco), selectedColorPicker.color, selectIcon),
-                IconWidget(Icon(Icons.event_seat), selectedColorPicker.color,
-                    selectIcon),
-                IconWidget(
-                    Icon(Icons.explore), selectedColorPicker.color, selectIcon),
-                IconWidget(Icon(Icons.favorite), selectedColorPicker.color,
-                    selectIcon),
-                IconWidget(Icon(Icons.flight_takeoff),
-                    selectedColorPicker.color, selectIcon),
-                IconWidget(
-                    Icon(Icons.home), selectedColorPicker.color, selectIcon),
-                IconWidget(Icon(Icons.lightbulb), selectedColorPicker.color,
-                    selectIcon),
-              ],
+              children: icons
+                  .map(
+                    (IconData iconData) => IconWidget(
+                        Icon(iconData), selectedColorPicker.color, selectIcon),
+                  )
+                  .toList(),
             ),
           );
         });
@@ -183,16 +156,17 @@ class _AddCategoryWidgetState extends State<AddCategoryWidget> {
               TextFormField(
                 controller: textFieldController,
                 decoration: InputDecoration(
-                  hintText: 'Category name...',
+                  hintText: 'Category Name...',
                 ),
                 style: TextStyle(fontSize: 20),
+                textCapitalization: TextCapitalization.words,
                 textInputAction: TextInputAction.done,
                 onChanged: (value) {
                   _formKey.currentState.validate();
                 },
                 validator: (value) {
                   if (value.isEmpty) {
-                    return 'Please enter a name';
+                    return 'Please enter a name for your category';
                   }
                   return null;
                 },
