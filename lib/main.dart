@@ -1,5 +1,8 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:numus/entities/settings.dart';
@@ -8,7 +11,6 @@ import 'package:numus/services/SharedPreferencesService.dart';
 import 'package:numus/ui/home/home_screen.dart';
 import 'package:numus/ui/wizard/get_started.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter/foundation.dart' show kDebugMode;
 
 import 'constants/application.dart';
 
@@ -18,8 +20,7 @@ void main() async {
   if (kDebugMode) {
     // Force disable Crashlytics collection while doing every day development.
     // Temporarily toggle this to true if you want to test crash reporting in your app.
-    await FirebaseCrashlytics.instance
-        .setCrashlyticsCollectionEnabled(false);
+    await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
   }
   await DatabaseProvider().database;
   Settings settings = await SharedPreferencesService().getSettings();
@@ -29,7 +30,10 @@ void main() async {
   } else {
     first = GetStartedWidget();
   }
-  runApp(MyApp(first, settings: settings,));
+  runApp(MyApp(
+    first,
+    settings: settings,
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -41,18 +45,23 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     WidgetsFlutterBinding.ensureInitialized();
+    FirebaseAnalytics analytics = FirebaseAnalytics();
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
     return ChangeNotifierProvider(
       create: (_) => settings,
       child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: appName,
-          theme: ThemeData(
-            primarySwatch: Colors.green,
-            visualDensity: VisualDensity.adaptivePlatformDensity,
-          ),
-          home: first),
+        debugShowCheckedModeBanner: false,
+        title: appName,
+        theme: ThemeData(
+          primarySwatch: Colors.green,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        home: first,
+        navigatorObservers: [
+          FirebaseAnalyticsObserver(analytics: analytics),
+        ],
+      ),
     );
   }
 }
