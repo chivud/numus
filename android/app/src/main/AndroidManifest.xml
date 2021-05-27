@@ -1,7 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.themachine.numus">
+   <uses-permission android:name="android.permission.INTERNET"/>
    <application
-        android:label="numus"
+        android:label="Numus"
         android:icon="@mipmap/numus_launcher">
         <activity
             android:name=".MainActivity"
