@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "131035893492",
+    "project_id": "numus-16f73",
+    "storage_bucket": "numus-16f73.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:131035893492:android:62bb5a86ef74450d7918a1",
+        "android_client_info": {
+          "package_name": "com.themachine.numus"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "131035893492-jfkovust0274jh1ob1je3ck5ep0850ea.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCN8eEAlZPLjJDK24lsYJltRlT1i1eQz8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "131035893492-jfkovust0274jh1ob1je3ck5ep0850ea.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
