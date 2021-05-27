@@ -26,6 +26,7 @@ class _SelectCategoryWidgetState extends State<SelectCategoryWidget>
 
   @override
   void initState() {
+    super.initState();
     animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 500));
   }

@@ -1,15 +1,13 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:numus/entities/settings.dart';
 import 'package:numus/services/DatabaseProvider.dart';
 import 'package:numus/services/SharedPreferencesService.dart';
 import 'package:numus/ui/home/home_screen.dart';
-import 'package:numus/ui/wizard/currency_picker.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:numus/ui/wizard/get_started.dart';
 import 'package:provider/provider.dart';
 
 import 'constants/application.dart';
-import 'constants/currencies.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
