@@ -89,7 +89,7 @@ class CustomCircleSymbolRenderer extends Charts.CircleSymbolRenderer {
     var textStyle = style.TextStyle();
     textStyle.color = Charts.Color.black;
     textStyle.fontSize = 15;
-    canvas.drawText(TextElement("$amount", style: textStyle),
+    canvas.drawText(TextElement("${amount.toStringAsFixed(2)}", style: textStyle),
         (bounds.left).round(), (bounds.top - 28).round());
     canvas.drawText(TextElement(formatter.format(date), style: textStyle),
         (bounds.left).round(), (bounds.top - 50).round());
