@@ -5,7 +5,9 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:numus/entities/settings.dart';
+import 'package:numus/services/AdState.dart';
 import 'package:numus/services/DatabaseProvider.dart';
 import 'package:numus/services/SharedPreferencesService.dart';
 import 'package:numus/ui/home/home_screen.dart';
@@ -46,10 +48,17 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     WidgetsFlutterBinding.ensureInitialized();
     FirebaseAnalytics analytics = FirebaseAnalytics();
+    final initFuture = MobileAds.instance.initialize();
+    final adState = AdState(initFuture);
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-    return ChangeNotifierProvider(
-      create: (_) => settings,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => settings),
+        Provider(
+          create: (_) => adState,
+        )
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: appName,

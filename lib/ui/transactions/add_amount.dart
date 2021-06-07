@@ -191,7 +191,7 @@ class _CalculatorWidgetState extends State<CalculatorWidget> {
       OperationsService().persistOperation(operation).then((value) =>
           Navigator.pushAndRemoveUntil(
               context,
-              MaterialPageRoute(builder: (context) => HomeScreen()),
+              MaterialPageRoute(builder: (context) => HomeScreen(cameFromAddAmount: true,)),
               (Route<dynamic> route) => false));
     } else {
       widget.operation.amount = parsedValue;
