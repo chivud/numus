@@ -44,7 +44,7 @@ class OperationPieChart extends OperationChart{
             showMeasures: true,
             legendDefaultMeasure: Charts.LegendDefaultMeasure.firstValue,
             measureFormatter: (value) =>
-                value.toString() + ' ' + settings.currency.symbol,
+                value.toStringAsFixed(2) + ' ' + settings.currency.symbol,
           )
         ],
       );
