@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:numus/constants/currencies.dart';
 import 'package:numus/ui/wizard/currency_picker.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class GetStartedWidget extends StatelessWidget {
   @override
@@ -19,7 +20,7 @@ class GetStartedWidget extends StatelessWidget {
               Center(
                 child: Container(
                   margin: EdgeInsets.only(top: 50),
-                  child: Text('Welcome!', style: TextStyle(
+                  child: Text(AppLocalizations.of(context).getStartedTitle, style: TextStyle(
                     fontSize: 24
                   ),),
                 ),
@@ -27,7 +28,7 @@ class GetStartedWidget extends StatelessWidget {
               Center(
                 child: Container(
                   margin: EdgeInsets.only(left: 40, right: 40, top: 10),
-                  child: Text('Start tracking your income, expenses and savings with just a few taps.',
+                  child: Text(AppLocalizations.of(context).getStartedBody,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                     fontSize: 18,
@@ -52,7 +53,7 @@ class GetStartedWidget extends StatelessWidget {
                         builder: (context) => CurrencyPickerWidget(currencies)))
               },
               child: Text(
-                'Get Started',
+                AppLocalizations.of(context).getStartedAction,
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.w400),
               ),
             ),

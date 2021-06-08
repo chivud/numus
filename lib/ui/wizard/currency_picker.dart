@@ -4,6 +4,7 @@ import 'package:numus/entities/settings.dart';
 import 'package:numus/services/SharedPreferencesService.dart';
 import 'package:numus/ui/wizard/start_of_month_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CurrencyPickerWidget extends StatefulWidget {
   final List<Currency> currencies;
@@ -60,7 +61,7 @@ class _CurrencyPickerWidgetState extends State<CurrencyPickerWidget> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Pick your currency',
+          AppLocalizations.of(context).currencyTitle,
           key: Key('currency_title'),
         ),
       ),
@@ -68,7 +69,7 @@ class _CurrencyPickerWidgetState extends State<CurrencyPickerWidget> {
         children: [
           TextField(
             decoration: InputDecoration(
-                contentPadding: EdgeInsets.all(15), hintText: 'search...'),
+                contentPadding: EdgeInsets.all(15), hintText: AppLocalizations.of(context).currencySearch),
             onChanged: (value) {
               setState(() {
                 filterList(search: value);

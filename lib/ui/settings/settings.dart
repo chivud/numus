@@ -6,6 +6,7 @@ import 'package:numus/ui/wizard/currency_picker.dart';
 import 'package:numus/ui/wizard/start_of_month_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 const String mailToUrl = 'mailto:office@themachine.dev?subject=Feedback%20for%20Numus';
 class SettingsWidget extends StatefulWidget {
@@ -19,14 +20,13 @@ class _SettingsWidgetState extends State<SettingsWidget> {
     Settings settings = Provider.of<Settings>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Settings'),
+        title: Text(AppLocalizations.of(context).settingsTitle),
       ),
       body: Container(
-        // margin: EdgeInsets.all(10),
         child: ListView(
           children: [
             ListTile(
-              title: Text('Currency'),
+              title: Text(AppLocalizations.of(context).settingsCurrency),
               leading: Icon(Icons.payments),
               trailing: Text(
                 settings.currency.symbol,
@@ -44,7 +44,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
             ),
             Divider(),
             ListTile(
-              title: Text('First day of the month'),
+              title: Text(AppLocalizations.of(context).settingsFirstDay),
               leading: Icon(Icons.calendar_today),
               trailing: Text(
                 settings.startOfMonth.toString(),
@@ -61,7 +61,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
             ),
             Divider(),
             ListTile(
-              title: Text('Leave Feedback'),
+              title: Text(AppLocalizations.of(context).settingsFeedback),
               leading: Icon(Icons.mail),
               onTap: () async {
                 if(await canLaunch(mailToUrl)){

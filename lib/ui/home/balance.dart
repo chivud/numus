@@ -7,6 +7,7 @@ import 'package:numus/ui/transactions/add_amount.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class BalanceWidget extends StatefulWidget {
   @override
@@ -54,7 +55,7 @@ class _BalanceWidgetState extends State<BalanceWidget> {
                                 Container(
                                   width: 100,
                                   child: Text(
-                                    'Your balance',
+                                    AppLocalizations.of(context).homeYourBalance,
                                     style: TextStyle(
                                         fontSize: 14, color: Colors.grey),
                                   ),
@@ -91,7 +92,7 @@ class _BalanceWidgetState extends State<BalanceWidget> {
                                   Container(
                                     width: 100,
                                     child: Text(
-                                      'Your savings',
+                                      AppLocalizations.of(context).homeYourSavings,
                                       style: TextStyle(
                                           fontSize: 14, color: Colors.grey),
                                     ),
@@ -126,7 +127,6 @@ class _BalanceWidgetState extends State<BalanceWidget> {
                       padding: EdgeInsets.all(0),
                       decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          // borderRadius: BorderRadius.all(Radius.circular(10)),
                           color: Colors.green),
                       child: IconButton(
                           focusColor: Colors.grey,

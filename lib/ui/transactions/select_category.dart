@@ -8,6 +8,7 @@ import 'package:numus/ui/transactions/add_category.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SelectCategoryWidget extends StatefulWidget {
   final Operation operation;
@@ -41,7 +42,7 @@ class _SelectCategoryWidgetState extends State<SelectCategoryWidget>
       length: 3,
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Select category'),
+          title: Text(AppLocalizations.of(context).selectCategoryTitle),
           actions: [
             IconButton(
                 icon: Icon(editMode ? Icons.done : Icons.edit),
@@ -120,20 +121,20 @@ class _CategoriesListWidgetState extends State<CategoriesListWidget>
       barrierDismissible: true, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Remove category'),
+          title: Text(AppLocalizations.of(context).selectCategoryRemoveCategoryPopUpTitle),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
                 Text(hasTransactions
-                    ? 'This category cannot be removed because it has transactions attached. Please edit it if you want to change something.'
-                    : 'Are you sure do you want to completely remove this category?'),
+                    ? AppLocalizations.of(context).selectCategoryRemoveCategoryPopUpImpossibleContent
+                    : AppLocalizations.of(context).selectCategoryRemoveCategoryPopUpContent),
               ],
             ),
           ),
           actions: hasTransactions
               ? [
                   TextButton(
-                    child: Text('OK'),
+                    child: Text(AppLocalizations.of(context).selectCategoryRemoveCategoryPopUpConfirm),
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
@@ -142,7 +143,7 @@ class _CategoriesListWidgetState extends State<CategoriesListWidget>
               : [
                   TextButton(
                     child: Text(
-                      'Remove',
+            AppLocalizations.of(context).selectCategoryRemoveCategoryPopUpRemove,
                       style: TextStyle(color: Colors.red),
                     ),
                     onPressed: () {
@@ -153,7 +154,7 @@ class _CategoriesListWidgetState extends State<CategoriesListWidget>
                     },
                   ),
                   TextButton(
-                    child: Text('Cancel'),
+                    child: Text(AppLocalizations.of(context).selectCategoryRemoveCategoryPopUpCancel),
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
@@ -220,13 +221,13 @@ class _CategoriesListWidgetState extends State<CategoriesListWidget>
           } else {
             children.add(ListTile(
               title: Text(
-                  'There are no ${widget.type.name.toLowerCase()} categories'),
+                  AppLocalizations.of(context).selectCategoryThereAreNoCategories),
               onTap: () {},
             ));
           }
           children.add(ListTile(
             leading: Icon(Icons.add),
-            title: Text('Add category...'),
+            title: Text(AppLocalizations.of(context).selectCategoryAddCategory),
             onTap: () async {
               await Navigator.push(
                   context,

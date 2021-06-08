@@ -9,6 +9,7 @@ import 'package:numus/services/OperationsService.dart';
 import 'package:numus/ui/common/daterange_button.dart';
 import 'package:numus/ui/transactions/edit_transaction.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TransactionListWidget extends StatefulWidget {
   @override
@@ -115,7 +116,7 @@ class _TransactionListWidgetState extends State<TransactionListWidget> {
               Container(
                 padding: EdgeInsets.only(left: 20, top: 10, bottom: 5),
                 child: Text(
-                  'Transaction list',
+                  AppLocalizations.of(context).homeTransactionList,
                   style: TextStyle(fontSize: 14, color: Colors.grey),
                 ),
               ),
@@ -139,7 +140,7 @@ class _TransactionListWidgetState extends State<TransactionListWidget> {
               builderDelegate:
                   PagedChildBuilderDelegate(noItemsFoundIndicatorBuilder: (_) {
                 return ListTile(
-                  title: Text('There are no operations yet..'),
+                  title: Text(AppLocalizations.of(context).homeTransactionListEmpty),
                   onTap: () {},
                 );
               }, itemBuilder: (context, Operation operation, index) {

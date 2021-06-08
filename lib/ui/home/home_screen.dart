@@ -8,6 +8,7 @@ import 'package:numus/ui/home/transaction_list.dart';
 import 'package:numus/ui/settings/settings.dart';
 import 'package:numus/ui/transactions/select_category.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeScreen extends StatefulWidget {
   final bool cameFromAddAmount;
@@ -44,13 +45,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print('cameFromAddAmount');
-    print(widget.cameFromAddAmount);
     if (widget.cameFromAddAmount && isAdReady) {
       ad.show();
     }
     return Scaffold(
-      appBar: AppBar(title: Text('Overview')),
+      appBar: AppBar(title: Text(AppLocalizations.of(context).homeTitle)),
       body: Container(
           padding: EdgeInsets.all(10),
           child: Column(
@@ -90,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
               },
               child: Column(
                 mainAxisSize: MainAxisSize.min,
-                children: [Icon(Icons.pie_chart), Text('Charts')],
+                children: [Icon(Icons.pie_chart), Text(AppLocalizations.of(context).homeCharts)],
               ),
             ),
             TextButton(
@@ -106,7 +105,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Icon(Icons.settings),
-                  Text('Settings'),
+                  Text(AppLocalizations.of(context).homeSettings),
                 ],
               ),
             ),

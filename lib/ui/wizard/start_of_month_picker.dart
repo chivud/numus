@@ -3,6 +3,7 @@ import 'package:numus/services/SharedPreferencesService.dart';
 import 'package:numus/ui/home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class StartOfMonthPickerWidget extends StatefulWidget {
   final bool isInWizard;
@@ -40,7 +41,7 @@ class _StartOfMonthPickerWidgetState extends State<StartOfMonthPickerWidget> {
     Settings settings = Provider.of<Settings>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Enter start of month'),
+        title: Text(AppLocalizations.of(context).startOfMonthTitle),
       ),
       body: Container(
         margin: EdgeInsets.only(
@@ -52,13 +53,13 @@ class _StartOfMonthPickerWidgetState extends State<StartOfMonthPickerWidget> {
           children: [
             Center(
               child: Text(
-                'Enter first day of the month',
+                AppLocalizations.of(context).startOfMonthSubtitle,
                 style: TextStyle(fontSize: 24),
               ),
             ),
             Center(
               child: Text(
-                'It is usually the day you receive your salary',
+                AppLocalizations.of(context).startOfMonthBody,
                 style: TextStyle(fontSize: 16),
               ),
             ),
@@ -78,11 +79,11 @@ class _StartOfMonthPickerWidgetState extends State<StartOfMonthPickerWidget> {
                       try {
                         int intValue = int.parse(value);
                         if (intValue < 1 || intValue > 30) {
-                          return 'Value must be between 1 and 30';
+                          return AppLocalizations.of(context).startOfMonthError;
                         }
                         return null;
                       } catch (FormatException) {
-                        return 'Value must be between 1 and 30';
+                        return AppLocalizations.of(context).startOfMonthError;
                       }
                     },
                   ),

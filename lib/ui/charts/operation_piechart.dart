@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:numus/entities/charts/operations_summary.dart';
 import 'package:numus/entities/settings.dart';
 import 'package:numus/ui/charts/operation_chart.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class OperationPieChart extends OperationChart{
   final List<OperationSummary> list;
@@ -50,7 +51,7 @@ class OperationPieChart extends OperationChart{
       );
     }
     return Center(
-      child: Text('No data for this time range.'),
+      child: Text(AppLocalizations.of(context).chartsExpensesEmpty),
     );
   }
 }

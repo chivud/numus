@@ -9,6 +9,7 @@ import 'package:numus/ui/charts/operation_linechart.dart';
 import 'package:numus/ui/charts/operation_piechart.dart';
 import 'package:numus/ui/common/daterange_button.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ChartsWidget extends StatefulWidget {
   @override
@@ -59,7 +60,7 @@ class _ChartsWidgetState extends State<ChartsWidget> {
     }
     return Scaffold(
       appBar: AppBar(
-        title: Text('Charts'),
+        title: Text(AppLocalizations.of(context).chartsTitle),
         actions: [
           Container(
             padding: EdgeInsets.all(10),
@@ -91,7 +92,7 @@ class _ChartsWidgetState extends State<ChartsWidget> {
                     if (list != null) {
                       return ChartCard(
                           OperationPieChart(list, expenseType.tag, settings),
-                          'Total Expenses');
+                          AppLocalizations.of(context).chartsExpensesTitle);
                     }
                     return Text('loading...');
                   },
@@ -107,11 +108,11 @@ class _ChartsWidgetState extends State<ChartsWidget> {
                         children: [
                           Expanded(
                             child: ChartCard(OperationLineChart(data['income'], 'income'),
-                                'Income burnout'),
+                                AppLocalizations.of(context).chartsIncomeTitle),
                           ),
                           Expanded(
                             child: ChartCard(OperationLineChart(data['savings'], 'savings'),
-                                'Savings'),
+                                AppLocalizations.of(context).chartsSavingsTitle),
                           ),
                         ],
                       );

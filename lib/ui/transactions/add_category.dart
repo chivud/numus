@@ -4,6 +4,7 @@ import 'package:numus/entities/category_type.dart';
 import 'package:numus/services/CategoryService.dart';
 import 'package:flutter/material.dart';
 import 'package:numus/constants/icons.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 const Color initialColor = Colors.green;
 
@@ -121,14 +122,37 @@ class _AddCategoryWidgetState extends State<AddCategoryWidget> {
         });
   }
 
+  String getAddTitle(CategoryType categoryType){
+    switch (categoryType.tag){
+      case 'income':
+        return AppLocalizations.of(context).addCategoryIncomeTitle;
+      case 'expense':
+        return AppLocalizations.of(context).addCategoryExpensesTitle;
+      case 'savings':
+        return AppLocalizations.of(context).addCategorySavingsTitle;
+    }
+    return '';
+  }
+
+  String getEditTitle(CategoryType categoryType){
+    switch (categoryType.tag){
+      case 'income':
+        return AppLocalizations.of(context).editCategoryIncomeTitle;
+      case 'expense':
+        return AppLocalizations.of(context).editCategoryExpensesTitle;
+      case 'savings':
+        return AppLocalizations.of(context).editCategorySavingsTitle;
+    }
+    return '';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: widget.category == null
-            ? Text(
-                'Add ' + widget.categoryType.name.toLowerCase() + ' category')
-            : Text('Edit ' + widget.category.name + ' category'),
+            ? Text(getAddTitle(widget.categoryType))
+            : Text(getEditTitle(widget.category.type)),
         actions: [
           IconButton(
               icon: Icon(Icons.done),
@@ -156,7 +180,7 @@ class _AddCategoryWidgetState extends State<AddCategoryWidget> {
               TextFormField(
                 controller: textFieldController,
                 decoration: InputDecoration(
-                  hintText: 'Category Name...',
+                  hintText: AppLocalizations.of(context).addCategoryName,
                 ),
                 style: TextStyle(fontSize: 20),
                 textCapitalization: TextCapitalization.words,
@@ -166,7 +190,7 @@ class _AddCategoryWidgetState extends State<AddCategoryWidget> {
                 },
                 validator: (value) {
                   if (value.isEmpty) {
-                    return 'Please enter a name for your category';
+                    return AppLocalizations.of(context).addCategoryEmptyName;
                   }
                   return null;
                 },

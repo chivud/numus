@@ -9,6 +9,7 @@ import 'package:numus/ui/charts/operation_chart.dart';
 import 'package:charts_flutter/src/text_element.dart'; // ignore: implementation_imports
 import 'package:charts_flutter/src/text_style.dart' // ignore: implementation_imports
     as style;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class OperationLineChart extends OperationChart {
   final List<TypeSummary> list;
@@ -51,7 +52,7 @@ class OperationLineChart extends OperationChart {
       );
     }
     return Center(
-      child: Text('No data for this time range.'),
+      child: Text(AppLocalizations.of(context).chartsExpensesEmpty),
     );
   }
 }

@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AddAmountScreen extends StatelessWidget {
   final Category category;
@@ -20,7 +21,7 @@ class AddAmountScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String text = category.type != withdrawType
-        ? 'Add ${category.name} amount'
+        ? AppLocalizations.of(context).addAmountTitle + ': ${category.name}'
         : category.name;
     return Scaffold(
       appBar: AppBar(title: Text(text)),
@@ -128,11 +129,11 @@ class _CalculatorWidgetState extends State<CalculatorWidget> {
         SnackBar(
           behavior: SnackBarBehavior.floating,
           action: SnackBarAction(
-            label: 'OK',
+            label: AppLocalizations.of(context).addAmountMessageNotZeroAction,
             onPressed: () {},
           ),
           duration: Duration(seconds: 10),
-          content: Text('The ammount cannot be 0'),
+          content: Text(AppLocalizations.of(context).addAmountMessageNotZero),
         ),
       );
       return;
@@ -148,12 +149,12 @@ class _CalculatorWidgetState extends State<CalculatorWidget> {
           SnackBar(
             behavior: SnackBarBehavior.floating,
             action: SnackBarAction(
-              label: 'OK',
+              label: AppLocalizations.of(context).addAmountMessageNotZeroAction,
               onPressed: () {},
             ),
             duration: Duration(seconds: 10),
             content: Text(parsedValue.toStringAsFixed(2) +
-                ' exceeds the total amount available in savings(' +
+                ' ' + AppLocalizations.of(context).addAmountMessageExceedsSavings +'(' +
                 totalSavings.toStringAsFixed(2) +
                 ')'),
           ),
@@ -169,11 +170,11 @@ class _CalculatorWidgetState extends State<CalculatorWidget> {
             behavior: SnackBarBehavior.floating,
             duration: Duration(seconds: 10),
             action: SnackBarAction(
-              label: 'OK',
+              label: AppLocalizations.of(context).addAmountMessageNotZeroAction,
               onPressed: () {},
             ),
             content: Text(parsedValue.toStringAsFixed(2) +
-                ' exceeds the total amount available in balance(' +
+                ' ' + AppLocalizations.of(context).addAmountMessageExceedsBalance +'(' +
                 totalBalance.toStringAsFixed(2) +
                 ')'),
           ),

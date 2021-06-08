@@ -10,6 +10,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class EditTransactionWidget extends StatefulWidget {
   final Operation operation;
@@ -79,19 +80,19 @@ class _EditTransactionWidgetState extends State<EditTransactionWidget> {
       barrierDismissible: true, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Remove transaction'),
+          title: Text(AppLocalizations.of(context).editTransactionPopUpTitle),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
                 Text(
-                    'Are you sure do you want to completely remove this transaction?'),
+                    AppLocalizations.of(context).editTransactionPopUpBody),
               ],
             ),
           ),
           actions: [
             TextButton(
               child: Text(
-                'Remove',
+                AppLocalizations.of(context).editTransactionPopUpAction,
                 style: TextStyle(color: Colors.red),
               ),
               onPressed: () {
@@ -106,7 +107,7 @@ class _EditTransactionWidgetState extends State<EditTransactionWidget> {
               },
             ),
             TextButton(
-              child: Text('Cancel'),
+              child: Text(AppLocalizations.of(context).editTransactionPopUpCancel),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -122,7 +123,7 @@ class _EditTransactionWidgetState extends State<EditTransactionWidget> {
     Settings settings = Provider.of<Settings>(context);
     return WillPopScope(child: Scaffold(
       appBar: AppBar(
-        title: Text('Edit transaction'),
+        title: Text(AppLocalizations.of(context).editTransactionTitle),
         actions: [
           IconButton(icon: Icon(Icons.done), onPressed: onPressDone),
           IconButton(icon: Icon(Icons.delete), onPressed: onPressDelete),

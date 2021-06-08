@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:month_picker_dialog/month_picker_dialog.dart';
 import 'package:numus/constants/date.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 enum DateMode { month, range, all }
 
@@ -20,7 +21,7 @@ class DateRangeButtonWidget extends StatelessWidget {
 
   String getDateText(DateTimeRange range) {
     if (mode == DateMode.all) {
-      return 'All';
+      return AppLocalizations.of(context).datePickerAll;
     }
     return dateFormatter.format(range.start) +
         ' - ' +
@@ -36,17 +37,17 @@ class DateRangeButtonWidget extends StatelessWidget {
             children: [
               ListTile(
                 leading: Icon(Icons.all_inclusive),
-                title: Text('Show all'),
+                title: Text(AppLocalizations.of(context).datePickerShowAll),
                 onTap: showAll,
               ),
               ListTile(
                 leading: Icon(Icons.calendar_today),
-                title: Text('Select month'),
+                title: Text(AppLocalizations.of(context).datePickerSelectMonth),
                 onTap: selectMonth,
               ),
               ListTile(
                 leading: Icon(Icons.date_range),
-                title: Text('Select date range'),
+                title: Text(AppLocalizations.of(context).datePickerSelectRange),
                 onTap: showDateRange,
               ),
             ],
