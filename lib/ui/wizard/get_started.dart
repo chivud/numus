@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:numus/constants/currencies.dart';
+import 'package:numus/constants/languages.dart';
 import 'package:numus/ui/wizard/currency_picker.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:numus/ui/wizard/language_picker.dart';
 
 class GetStartedWidget extends StatelessWidget {
   @override
@@ -50,7 +52,7 @@ class GetStartedWidget extends StatelessWidget {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => CurrencyPickerWidget(currencies)))
+                        builder: (context) => LanguagePickerWidget(languages, true)))
               },
               child: Text(
                 AppLocalizations.of(context).getStartedAction,

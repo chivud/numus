@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:numus/entities/settings.dart';
 import 'package:numus/services/AdState.dart';
@@ -54,32 +55,52 @@ class MyApp extends StatelessWidget {
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
     return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => settings),
-        Provider(
-          create: (_) => adState,
-        )
-      ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: appName,
-        theme: ThemeData(
-          primarySwatch: Colors.green,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-        ),
-        home: first,
-        navigatorObservers: [
-          FirebaseAnalyticsObserver(analytics: analytics),
+        providers: [
+          ChangeNotifierProvider(create: (_) => settings),
+          Provider(
+            create: (_) => adState,
+          )
         ],
-        localizationsDelegates: [
-          AppLocalizations.delegate,
-        ],
-        supportedLocales: [
-          const Locale('en', ''), // English, no country code
-          const Locale('es', ''), // Spanish, no country code
-        ],
-        locale: Locale('en'),
+        child: AppContent(first, analytics)
+    );
+  }
+}
+
+class AppContent extends StatefulWidget {
+  final Widget first;
+  final FirebaseAnalytics analytics;
+
+  AppContent(this.first, this.analytics);
+
+  @override
+  _AppContentState createState() => _AppContentState();
+}
+
+class _AppContentState extends State<AppContent> {
+  @override
+  Widget build(BuildContext context) {
+    Settings settings = Provider.of<Settings>(context);
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: appName,
+      theme: ThemeData(
+        primarySwatch: Colors.green,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
+      home: widget.first,
+      navigatorObservers: [
+        FirebaseAnalyticsObserver(analytics: widget.analytics),
+      ],
+      localizationsDelegates: [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate
+      ],
+      supportedLocales: [
+        const Locale('en', ''), // English, no country code
+        const Locale('es', ''), // Spanish, no country code
+      ],
+      locale: Locale(settings.language != null ? settings.language.code : 'en'),
     );
   }
 }

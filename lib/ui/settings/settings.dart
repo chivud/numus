@@ -1,14 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:numus/constants/currencies.dart';
+import 'package:numus/constants/languages.dart';
 import 'package:numus/entities/settings.dart';
 import 'package:numus/ui/wizard/currency_picker.dart';
+import 'package:numus/ui/wizard/language_picker.dart';
 import 'package:numus/ui/wizard/start_of_month_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-const String mailToUrl = 'mailto:office@themachine.dev?subject=Feedback%20for%20Numus';
+const String mailToUrl =
+    'mailto:office@themachine.dev?subject=Feedback%20for%20Numus';
+
 class SettingsWidget extends StatefulWidget {
   @override
   _SettingsWidgetState createState() => _SettingsWidgetState();
@@ -61,10 +65,25 @@ class _SettingsWidgetState extends State<SettingsWidget> {
             ),
             Divider(),
             ListTile(
+              title: Text(AppLocalizations.of(context).settingsLanguage),
+              leading: Icon(Icons.language),
+              trailing: Text(
+                settings.language.name,
+                style: TextStyle(fontSize: 16),
+              ),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => LanguagePickerWidget(languages, false)));
+              },
+            ),
+            Divider(),
+            ListTile(
               title: Text(AppLocalizations.of(context).settingsFeedback),
               leading: Icon(Icons.mail),
               onTap: () async {
-                if(await canLaunch(mailToUrl)){
+                if (await canLaunch(mailToUrl)) {
                   await launch(mailToUrl);
                 }
               },
