@@ -43,4 +43,10 @@
            android:name="com.google.android.gms.ads.APPLICATION_ID"
            android:value="ca-app-pub-9310419432801628~6170544459"/>
     </application>
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.SEND"/>
+            <data android:mimeType="text/plain" />
+        </intent>
+    </queries>
 </manifest>
