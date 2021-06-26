@@ -7,7 +7,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 enum DateMode { month, range, all }
 
 class DateRangeButtonWidget extends StatelessWidget {
-  final DateFormat dateFormatter = DateFormat(dateFormat);
+  DateFormat dateFormatter;
   final BuildContext context;
   final DateMode mode;
   final DateTimeRange range;
@@ -17,7 +17,9 @@ class DateRangeButtonWidget extends StatelessWidget {
   final Color textColor;
 
 
-  DateRangeButtonWidget(this.context, this.mode, this.range, this.afterShowAll, this.afterSelectMonth, this.afterShowDateRange, {this.textColor = Colors.grey});
+  DateRangeButtonWidget(this.context, this.mode, this.range, this.afterShowAll, this.afterSelectMonth, this.afterShowDateRange, {this.textColor = Colors.grey}){
+    dateFormatter = DateFormat(dateFormat, AppLocalizations.of(context).localeName);
+  }
 
   String getDateText(DateTimeRange range) {
     if (mode == DateMode.all) {

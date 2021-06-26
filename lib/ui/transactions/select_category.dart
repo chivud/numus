@@ -50,9 +50,9 @@ class _SelectCategoryWidgetState extends State<SelectCategoryWidget>
           ],
           bottom: TabBar(
             tabs: [
-              Tab(text: expenseType.name.toUpperCase()),
-              Tab(text: incomeType.name.toUpperCase()),
-              Tab(text: savingType.name.toUpperCase()),
+              Tab(text: AppLocalizations.of(context).selectCategoryExpense.toUpperCase()),
+              Tab(text: AppLocalizations.of(context).selectCategoryIncome.toUpperCase()),
+              Tab(text: AppLocalizations.of(context).selectCategorySavings.toUpperCase()),
             ],
           ),
         ),

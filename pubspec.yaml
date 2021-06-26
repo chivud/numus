@@ -69,6 +69,9 @@ flutter:
     - assets/flags/us.svg
     - assets/flags/es.svg
     - assets/flags/ro.svg
+    - assets/flags/it.svg
+    - assets/flags/fr.svg
+    - assets/flags/pt.svg
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

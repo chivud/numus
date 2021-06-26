@@ -50,6 +50,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     WidgetsFlutterBinding.ensureInitialized();
     FirebaseAnalytics analytics = FirebaseAnalytics();
+    if(kDebugMode){
+      analytics.setAnalyticsCollectionEnabled(false);
+    }
     final initFuture = MobileAds.instance.initialize();
     final adState = AdState(initFuture);
     SystemChrome.setPreferredOrientations(
@@ -97,8 +100,12 @@ class _AppContentState extends State<AppContent> {
         GlobalWidgetsLocalizations.delegate
       ],
       supportedLocales: [
-        const Locale('en', ''), // English, no country code
-        const Locale('es', ''), // Spanish, no country code
+        const Locale('en', ''),
+        const Locale('es', ''),
+        const Locale('ro', ''),
+        const Locale('it', ''),
+        const Locale('fr', ''),
+        const Locale('pt', ''),
       ],
       locale: Locale(settings.language != null ? settings.language.code : 'en'),
     );

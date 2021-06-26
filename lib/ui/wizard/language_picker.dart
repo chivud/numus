@@ -60,13 +60,13 @@ class _LanguagePickerWidgetState extends State<LanguagePickerWidget> {
     Settings settings = Provider.of<Settings>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Select your language'),
+        title: Text(AppLocalizations.of(context).languagePickerSelect),
       ),
       body: Column(
         children: [
           TextField(
             decoration: InputDecoration(
-                contentPadding: EdgeInsets.all(15), hintText: 'search...'),
+                contentPadding: EdgeInsets.all(15), hintText: AppLocalizations.of(context).languageSearch + '...'),
             onChanged: (value) {
               setState(() {
                 filterList(search: value);
