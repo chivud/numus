@@ -105,6 +105,7 @@ class _TransactionListWidgetState extends State<TransactionListWidget> {
       range = getTimeRange(selectedDate: null);
     }
     final DateFormat formatter = DateFormat(dateTimeFormat);
+    pagingController.refresh();
     return Card(
       child: Column(
         mainAxisSize: MainAxisSize.min,

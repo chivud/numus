@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:numus/constants/currencies.dart';
 import 'package:numus/entities/language.dart';
 import 'package:numus/entities/settings.dart';
+import 'package:numus/services/CategoryService.dart';
 import 'package:numus/services/SharedPreferencesService.dart';
 import 'package:numus/ui/wizard/currency_picker.dart';
 import 'package:provider/provider.dart';
@@ -38,21 +39,22 @@ class _LanguagePickerWidgetState extends State<LanguagePickerWidget> {
     filterList();
   }
 
-  selectLanguage(index, Settings settings) {
-    SharedPreferencesService()
-        .setSelectedLanguage(filteredList[index])
-        .then((value) {
-      settings.setLanguage(filteredList[index]);
-      AppLocalizations.delegate.load(Locale(filteredList[index].code));
-      if (widget.isInWizard) {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => CurrencyPickerWidget(currencies)));
-      } else {
-        Navigator.pop(context);
-      }
-    });
+  selectLanguage(index, Settings settings)  async {
+    Language language = filteredList[index];
+    await SharedPreferencesService()
+        .setSelectedLanguage(language);
+    String oldCode = settings.language != null ? settings.language.code : 'en';
+    await CategoryService().translateCategories(oldCode, language.code);
+    settings.setLanguage(language);
+    AppLocalizations.delegate.load(Locale(filteredList[index].code));
+    if (widget.isInWizard) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => CurrencyPickerWidget(currencies)));
+    } else {
+      Navigator.pop(context);
+    }
   }
 
   @override

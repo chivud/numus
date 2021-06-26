@@ -1,5 +1,6 @@
 import 'package:numus/entities/category.dart';
 import 'package:numus/entities/category_type.dart';
+import 'package:numus/services/SeedService.dart';
 import 'package:sqflite/sqflite.dart';
 
 import 'DatabaseProvider.dart';
@@ -60,5 +61,20 @@ class CategoryService {
     Database db = await DatabaseProvider().database;
     return await db
         .delete('categories', where: 'id = ?', whereArgs: [category.id]);
+  }
+
+  Future<void>translateCategories(String oldLanguageCode, String newLanguageCode) async {
+    List oldCategories = SeedService().categoriesTranslation[oldLanguageCode];
+    List newCategories = SeedService().categoriesTranslation[newLanguageCode];
+    Database db = await DatabaseProvider().database;
+    Batch batch = db.batch();
+
+    for (var i = 0; i < oldCategories.length; i++) {
+      db.rawQuery(
+          "UPDATE categories SET name = ? WHERE name = ? and is_default = 1",
+          [newCategories[i], oldCategories[i]]);
+    }
+
+    await batch.commit();
   }
 }

@@ -89,7 +89,10 @@ class _HomeScreenState extends State<HomeScreen> {
               },
               child: Column(
                 mainAxisSize: MainAxisSize.min,
-                children: [Icon(Icons.pie_chart), Text(AppLocalizations.of(context).homeCharts)],
+                children: [
+                  Icon(Icons.pie_chart),
+                  Text(AppLocalizations.of(context).homeCharts)
+                ],
               ),
             ),
             TextButton(
@@ -97,9 +100,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   shape: CircleBorder(),
                   padding: EdgeInsets.all(10),
                   primary: Colors.black),
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => SettingsWidget()));
+              onPressed: () async {
+                await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => SettingsWidget()));
+                setState(() {});
               },
               child: Column(
                 mainAxisSize: MainAxisSize.min,
