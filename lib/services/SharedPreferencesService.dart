@@ -1,3 +1,4 @@
+import 'package:numus/constants/languages.dart';
 import 'package:numus/entities/currency.dart';
 import 'package:numus/entities/language.dart';
 import 'package:numus/entities/settings.dart';
@@ -29,7 +30,7 @@ class SharedPreferencesService {
       final name = pref.getString(languageName);
       return Language(name, code, flag);
     }
-    return null;
+    return defaultLanguage;
   }
 
   Future<void> setSelectedCurrency(Currency currency) async {

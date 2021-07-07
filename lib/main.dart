@@ -107,7 +107,7 @@ class _AppContentState extends State<AppContent> {
         const Locale('fr', ''),
         const Locale('pt', ''),
       ],
-      locale: Locale(settings.language != null ? settings.language.code : 'en'),
+      locale: Locale(settings.language.code),
     );
   }
 }
