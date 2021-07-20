@@ -106,6 +106,7 @@ class _AppContentState extends State<AppContent> {
         const Locale('it', ''),
         const Locale('fr', ''),
         const Locale('pt', ''),
+        const Locale('hi', ''),
       ],
       locale: Locale(settings.language.code),
     );

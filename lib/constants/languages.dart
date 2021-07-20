@@ -8,4 +8,5 @@ final List<Language> languages = [
   Language('Italiano', 'it', 'it.svg'),
   Language('Português', 'pt', 'pt.svg'),
   Language('Română', 'ro', 'ro.svg'),
+  Language('Hindī', 'hi', 'in.svg'),
 ];
