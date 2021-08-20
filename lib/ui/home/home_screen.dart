@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:numus/services/AdState.dart';
+import 'package:numus/ui/budgets/budgets_home.dart';
 import 'package:numus/ui/charts/charts.dart';
 import 'package:numus/ui/home/balance.dart';
 import 'package:numus/ui/home/transaction_list.dart';
@@ -76,44 +77,94 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            TextButton(
-              style: TextButton.styleFrom(
-                  shape: CircleBorder(),
-                  padding: EdgeInsets.all(10),
-                  primary: Colors.black),
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => ChartsWidget()));
-              },
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(Icons.pie_chart),
-                  Text(AppLocalizations.of(context).homeCharts)
-                ],
-              ),
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(left: 20),
+                      child: TextButton(
+                        style: TextButton.styleFrom(
+                            shape: CircleBorder(),
+                            padding: EdgeInsets.all(10),
+                            primary: Colors.black),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ChartsWidget()));
+                        },
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.pie_chart),
+                            Text(AppLocalizations.of(context).homeCharts)
+                          ],
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(left: 20),
+                      child: TextButton(
+                        style: TextButton.styleFrom(
+                            shape: CircleBorder(),
+                            padding: EdgeInsets.all(10),
+                            primary: Colors.black),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => BudgetsHomeWidget()));
+                        },
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.fact_check),
+                            Text(AppLocalizations.of(context).budgetHomeMuItem)
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              ],
             ),
-            TextButton(
-              style: TextButton.styleFrom(
-                  shape: CircleBorder(),
-                  padding: EdgeInsets.all(10),
-                  primary: Colors.black),
-              onPressed: () async {
-                await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => SettingsWidget()));
-                setState(() {});
-              },
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(Icons.settings),
-                  Text(AppLocalizations.of(context).homeSettings),
-                ],
-              ),
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(right: 20),
+                      child: TextButton(
+                        style: TextButton.styleFrom(
+                            shape: CircleBorder(),
+                            padding: EdgeInsets.all(10),
+                            primary: Colors.black),
+                        onPressed: () async {
+                          await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SettingsWidget()));
+                          setState(() {});
+                        },
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.settings),
+                            Text(AppLocalizations.of(context).homeSettings),
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                )
+              ],
             ),
           ],
         ),

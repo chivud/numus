@@ -61,5 +61,7 @@
   "getStartedBody": "Start tracking your income, expenses and savings with just a few taps.",
   "getStartedAction": "Get Started",
   "languagePickerSelect": "Select your language",
-  "languageSearch": "search"
+  "languageSearch": "search",
+  "budgetHomeMuItem": "Budgets",
+  "budgetScreenTitle": "Budget tracking"
 }
