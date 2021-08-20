@@ -63,5 +63,18 @@
   "languagePickerSelect": "Select your language",
   "languageSearch": "search",
   "budgetHomeMuItem": "Budgets",
-  "budgetScreenTitle": "Budget tracking"
+  "budgetScreenTitle": "Budget tracking",
+  "budgetAddScreenTitle": "Add budget for a category",
+  "budgetAddNamePlaceholder": "Budget title...",
+  "budgetAddNameError": "Budget name must not be empty.",
+  "budgetAddAmountPlaceholder": "Amount...",
+  "budgetAddAmountError": "Amount must not be empty.",
+  "budgetAddAmountNotNumericError": "Amount must not be a number.",
+  "budgetAddEachMonthOption": "Each month",
+  "budgetAddCustomOption": "Custom",
+  "budgetAddChoseTimeframe": "Chose timeframe...",
+  "budgetAddChoseTimeframeError": "You must select a timeframe first!",
+  "budgetAddChoseCategory": "Choose category...",
+  "budgetAddChoseCategoryError": "You must select a category first!",
+  "budgetAddErrorConfirm": "OK"
 }
