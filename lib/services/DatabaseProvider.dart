@@ -20,7 +20,7 @@ class DatabaseProvider {
       // `path` package is best practice to ensure the path is correctly
       // constructed for each platform.
       join(await getDatabasesPath(), 'app.db'),
-      version: 2,
+      version: 3,
       onCreate: (db, version) async {
         var batch = db.batch();
         db.execute(
@@ -30,7 +30,7 @@ class DatabaseProvider {
           "icon INTEGER NOT NULL, "
           "color INTEGER NOT NULL, "
           "type TEXT, "
-          "is_default INTEGER NO NULL DEFAULT 0"
+          "is_default INTEGER NOT NULL DEFAULT 0"
           ")",
         );
         db.execute("CREATE TABLE operations("
@@ -38,6 +38,17 @@ class DatabaseProvider {
             "category_id INTEGER, "
             "amount REAL, "
             "created_at INTEGER,"
+            "FOREIGN KEY(category_id) REFERENCES categories(id)"
+            ")");
+        db.execute("CREATE TABLE budgets("
+            "id INTEGER PRIMARY KEY,"
+            "title TEXT NOT NULL, "
+            "category_id INTEGER NOT NULL,"
+            "amount REAL, "
+            "created_at INTEGER,"
+            "type TEXT NOT NULL,"
+            "start INTEGER,"
+            "end INTEGER,"
             "FOREIGN KEY(category_id) REFERENCES categories(id)"
             ")");
         List<Category> categories = SeedService().getCategoriesSeed();
@@ -55,6 +66,30 @@ class DatabaseProvider {
             await db.rawQuery("UPDATE categories SET is_default=1 WHERE name = ?", [category.name]);
           }
           batch.commit();
+          db.execute("CREATE TABLE budgets("
+              "id INTEGER PRIMARY KEY,"
+              "title TEXT NOT NULL, "
+              "category_id INTEGER NOT NULL,"
+              "amount REAL, "
+              "created_at INTEGER,"
+              "type TEXT NOT NULL,"
+              "start INTEGER,"
+              "end INTEGER,"
+              "FOREIGN KEY(category_id) REFERENCES categories(id)"
+              ")");
+        }
+        if(oldVersion == 2){
+          db.execute("CREATE TABLE budgets("
+              "id INTEGER PRIMARY KEY,"
+              "title TEXT NOT NULL, "
+              "category_id INTEGER NOT NULL,"
+              "amount REAL, "
+              "created_at INTEGER,"
+              "type TEXT NOT NULL,"
+              "start INTEGER,"
+              "end INTEGER,"
+              "FOREIGN KEY(category_id) REFERENCES categories(id)"
+              ")");
         }
       }
     );

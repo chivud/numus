@@ -80,48 +80,51 @@ class _ChartsWidgetState extends State<ChartsWidget> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Expanded(
-            child: PageView(
-              scrollDirection: Axis.vertical,
-              children: [
-                FutureBuilder(
-                  future: ChartService().getSummaryByCategoryType(
-                      mode == DateMode.all ? null : range, expenseType),
-                  builder: (BuildContext context, AsyncSnapshot snapshot) {
-                    List<OperationSummary> list =
-                        snapshot.data as List<OperationSummary>;
-                    if (list != null) {
-                      return ChartCard(
-                          OperationPieChart(list, expenseType.tag, settings),
-                          AppLocalizations.of(context).chartsExpensesTitle);
-                    }
-                    return Text('loading...');
-                  },
-                ),
-                FutureBuilder(
-                  future: ChartService().getTypeSummary(
-                    mode != DateMode.all ? range : null,
+            child: Container(
+              margin: EdgeInsets.all(10),
+              child: PageView(
+                scrollDirection: Axis.vertical,
+                children: [
+                  FutureBuilder(
+                    future: ChartService().getSummaryByCategoryType(
+                        mode == DateMode.all ? null : range, expenseType),
+                    builder: (BuildContext context, AsyncSnapshot snapshot) {
+                      List<OperationSummary> list =
+                      snapshot.data as List<OperationSummary>;
+                      if (list != null) {
+                        return ChartCard(
+                            OperationPieChart(list, expenseType.tag, settings),
+                            AppLocalizations.of(context).chartsExpensesTitle);
+                      }
+                      return Text('loading...');
+                    },
                   ),
-                  builder: (BuildContext context, AsyncSnapshot snapshot) {
-                    Map<String, List> data = snapshot.data;
-                    if (data != null) {
-                      return Column(
-                        children: [
-                          Expanded(
-                            child: ChartCard(OperationLineChart(data['income'], 'income'),
-                                AppLocalizations.of(context).chartsIncomeTitle),
-                          ),
-                          Expanded(
-                            child: ChartCard(OperationLineChart(data['savings'], 'savings'),
-                                AppLocalizations.of(context).chartsSavingsTitle),
-                          ),
-                        ],
-                      );
-                    }
-                    return Text('loading...');
-                  },
-                ),
-              ],
-            ),
+                  FutureBuilder(
+                    future: ChartService().getTypeSummary(
+                      mode != DateMode.all ? range : null,
+                    ),
+                    builder: (BuildContext context, AsyncSnapshot snapshot) {
+                      Map<String, List> data = snapshot.data;
+                      if (data != null) {
+                        return Column(
+                          children: [
+                            Expanded(
+                              child: ChartCard(OperationLineChart(data['income'], 'income'),
+                                  AppLocalizations.of(context).chartsIncomeTitle),
+                            ),
+                            Expanded(
+                              child: ChartCard(OperationLineChart(data['savings'], 'savings'),
+                                  AppLocalizations.of(context).chartsSavingsTitle),
+                            ),
+                          ],
+                        );
+                      }
+                      return Text('loading...');
+                    },
+                  ),
+                ],
+              ),
+            )
           ),
         ],
       ),
@@ -138,7 +141,6 @@ class ChartCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(10),
       child: Column(
         children: [
           Expanded(

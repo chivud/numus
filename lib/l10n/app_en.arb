@@ -76,5 +76,10 @@
   "budgetAddChoseTimeframeError": "You must select a timeframe first!",
   "budgetAddChoseCategory": "Choose category...",
   "budgetAddChoseCategoryError": "You must select a category first!",
-  "budgetAddErrorConfirm": "OK"
+  "budgetAddErrorConfirm": "OK",
+  "budgetShowUnderBudget": "UNDER\nBUDGET",
+  "budgetShowOverBudget": "OVER\nBUDGET",
+  "budgetShowConsumed": "Consumed",
+  "budgetShowBudgeted": "Budgeted",
+  "budgetShowTimelineTitle": "Budget timeline"
 }

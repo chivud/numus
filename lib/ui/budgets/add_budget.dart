@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:numus/constants/date.dart';
+import 'package:numus/entities/budget.dart';
 import 'package:numus/entities/category.dart';
 import 'package:numus/entities/category_type.dart';
+import 'package:numus/services/BudgetService.dart';
 import 'package:numus/services/CategoryService.dart';
-
-enum DateMode { month, custom }
 
 class AddBudgetWidget extends StatefulWidget {
   @override
@@ -22,7 +22,7 @@ class _AddBudgetWidgetState extends State<AddBudgetWidget> {
   DateFormat dateFormatter;
   DateTimeRange range =
       DateTimeRange(start: DateTime.now(), end: DateTime.now());
-  DateMode mode;
+  BudgetType mode;
   Category category;
 
   void showDateRange() async {
@@ -34,7 +34,7 @@ class _AddBudgetWidgetState extends State<AddBudgetWidget> {
     if (result != null) {
       setState(() {
         range = result;
-        mode = DateMode.custom;
+        mode = BudgetType.custom;
       });
     }
   }
@@ -52,7 +52,7 @@ class _AddBudgetWidgetState extends State<AddBudgetWidget> {
                     Text(AppLocalizations.of(context).budgetAddEachMonthOption),
                 onTap: () {
                   setState(() {
-                    mode = DateMode.month;
+                    mode = BudgetType.month;
                     Navigator.pop(context);
                   });
                 },
@@ -121,8 +121,13 @@ class _AddBudgetWidgetState extends State<AddBudgetWidget> {
         });
   }
 
-  saveBudget() {
-    //TODO
+  saveBudget() async{
+    await BudgetService().createBudget(titleTextFieldController.text, category,
+        double.tryParse(amountTextFieldController.text),
+        mode,
+        start: mode == BudgetType.custom ? range.start : null,
+        end: mode == BudgetType.custom ? range.end : null);
+    Navigator.pop(context);
   }
 
   @override
@@ -297,7 +302,7 @@ class _AddBudgetWidgetState extends State<AddBudgetWidget> {
                 title: Text(
                   mode == null
                       ? AppLocalizations.of(context).budgetAddChoseTimeframe
-                      : (mode == DateMode.custom
+                      : (mode == BudgetType.custom
                           ? dateFormatter.format(range.start) +
                               ' - ' +
                               dateFormatter.format(range.end)

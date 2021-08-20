@@ -155,6 +155,54 @@ class ChartService {
     return {'income': incomeResult, 'savings': savingsResult};
   }
 
+  Future<List<TypeSummary>> getOperationsByCategory(
+      Category category, DateTimeRange range, double startingAmount) async {
+    Database db = await DatabaseProvider().database;
+    List<Map> list = [];
+      list = await db.rawQuery(
+          "SELECT operations.amount,"
+          "operations.created_at, "
+          "categories.type "
+          "FROM operations "
+          "JOIN categories ON categories.id = operations.category_id "
+          "WHERE operations.created_at BETWEEN ? AND ? "
+          "AND operations.category_id = ? "
+          "ORDER BY operations.created_at ",
+          [
+            range.start.millisecondsSinceEpoch,
+            range.end.millisecondsSinceEpoch,
+            category.id
+          ]);
+    if(list.isEmpty){
+      return [];
+    }
+
+    DateTime start = range.start;
+    DateTime end = range.end;
+
+    DateTime tmpDate = DateTime(start.year, start.month, start.day);
+    List<TypeSummary> result = [];
+    while (end.compareTo(tmpDate) > 0) {
+      for (var item in list) {
+        DateTime opDate =
+            DateTime.fromMillisecondsSinceEpoch(item['created_at']);
+        if (opDate.compareTo(tmpDate.add(Duration(days: 1))) > 0) {
+          break;
+        } else if (opDate.day == tmpDate.day &&
+            opDate.month == tmpDate.month &&
+            opDate.year == tmpDate.year) {
+
+          startingAmount -= item['amount'];
+          list.remove(item);
+        }
+      }
+      result.add(TypeSummary(date: tmpDate, amount: startingAmount));
+      tmpDate = tmpDate.add(Duration(days: 1));
+    }
+
+    return result;
+  }
+
   Future<double> getTotalIncomeBefore(DateTime date) async {
     Database db = await DatabaseProvider().database;
     List<Map> result = await db.rawQuery(

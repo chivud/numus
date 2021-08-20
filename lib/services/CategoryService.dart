@@ -22,6 +22,19 @@ class CategoryService {
     return categories;
   }
 
+  Future<Category> getById(int id) async {
+    Database db = await DatabaseProvider().database;
+    final List<Map<String, dynamic>> result =
+        await db.query('categories', where: 'id = ?', whereArgs: [id]);
+    String type = result.first['type'];
+    return Category(
+        id: result.first['id'],
+        name: result.first['name'],
+        color: result.first['color'],
+        icon: result.first['icon'],
+        type: type == 'income' ? incomeType : type == 'expense' ? expenseType : savingType);
+  }
+
   Future<void> createCategory(
       CategoryType type, String name, int icon, int color) async {
     Category category =
