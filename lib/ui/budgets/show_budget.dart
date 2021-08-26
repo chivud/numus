@@ -1,38 +1,69 @@
 import 'package:flutter/material.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:numus/constants/date.dart';
 import 'package:numus/entities/budget.dart';
-import 'package:numus/entities/operation.dart';
 import 'package:numus/entities/settings.dart';
+import 'package:numus/services/BudgetService.dart';
 import 'package:numus/services/ChartService.dart';
 import 'package:numus/services/OperationsService.dart';
+import 'package:numus/ui/budgets/add_or_edit_budget.dart';
 import 'package:numus/ui/charts/charts.dart';
 import 'package:numus/ui/charts/operation_linechart.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class ShowBudgetWidget extends StatefulWidget {
+class ShowBudgetWidget extends StatelessWidget {
   final Budget budget;
+  final DateFormat formatter = DateFormat(monthDayFormat);
 
   ShowBudgetWidget(this.budget);
 
-  @override
-  _ShowBudgetWidgetState createState() => _ShowBudgetWidgetState();
-}
-
-class _ShowBudgetWidgetState extends State<ShowBudgetWidget> {
-  final DateFormat formatter = DateFormat(monthDayFormat);
-
-  final PagingController<int, Operation> pagingController =
-      PagingController(firstPageKey: 0);
+  showDeleteConfirmation(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(AppLocalizations.of(context).budgetShowConfirmText),
+            actions: [
+              TextButton(
+                  onPressed: () async  {
+                    await BudgetService().delete(budget.id);
+                    //get to the budget home screen
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(
+                  AppLocalizations.of(context).budgetShowConfirmDelete,
+                    style: TextStyle(color: Colors.red),
+                  )),
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(
+                    AppLocalizations.of(context).budgetShowConfirmCancel,
+                    style: TextStyle(color: Colors.grey),
+                  )),
+            ],
+          );
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
     Settings settings = Provider.of<Settings>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.budget.title),
+        title: Text(budget.title),
+        actions: [
+          IconButton(onPressed: () async {
+            await Navigator.push(context,
+                MaterialPageRoute(builder: (context) => AddOrEditBudgetWidget(budget: budget,)));
+          }, icon: Icon(Icons.edit)),
+          IconButton(
+              onPressed: () => showDeleteConfirmation(context),
+              icon: Icon(Icons.delete)),
+        ],
       ),
       body: ListView(
         padding: EdgeInsets.all(10),
@@ -51,10 +82,10 @@ class _ShowBudgetWidgetState extends State<ShowBudgetWidget> {
                           Container(
                             padding: EdgeInsets.all(7),
                             decoration: BoxDecoration(
-                                color: Color(widget.budget.category.color),
+                                color: Color(budget.category.color),
                                 shape: BoxShape.circle),
                             child: Icon(
-                              IconData(widget.budget.category.icon,
+                              IconData(budget.category.icon,
                                   fontFamily: 'MaterialIcons'),
                               color: Colors.white,
                               size: 20,
@@ -63,7 +94,7 @@ class _ShowBudgetWidgetState extends State<ShowBudgetWidget> {
                           Container(
                             margin: EdgeInsets.only(left: 10),
                             child: Text(
-                              widget.budget.category.name,
+                              budget.category.name,
                               style: TextStyle(fontSize: 20),
                             ),
                           ),
@@ -73,10 +104,9 @@ class _ShowBudgetWidgetState extends State<ShowBudgetWidget> {
                         children: [
                           Container(
                             margin: EdgeInsets.only(top: 10),
-                            child: Text(
-                                formatter.format(widget.budget.range.start) +
-                                    ' - ' +
-                                    formatter.format(widget.budget.range.end)),
+                            child: Text(formatter.format(budget.range.start) +
+                                ' - ' +
+                                formatter.format(budget.range.end)),
                           ),
                         ],
                       )
@@ -87,14 +117,14 @@ class _ShowBudgetWidgetState extends State<ShowBudgetWidget> {
                       Row(
                         children: [
                           Text(
-                            widget.budget.isUnderBudget()
+                            budget.isUnderBudget()
                                 ? AppLocalizations.of(context)
                                     .budgetShowUnderBudget
                                 : AppLocalizations.of(context)
                                     .budgetShowOverBudget,
                             style: TextStyle(
                                 fontSize: 20,
-                                color: widget.budget.isUnderBudget()
+                                color: budget.isUnderBudget()
                                     ? Colors.green
                                     : Colors.red),
                           ),
@@ -120,7 +150,7 @@ class _ShowBudgetWidgetState extends State<ShowBudgetWidget> {
                           style: TextStyle(fontSize: 14, color: Colors.grey),
                         ),
                         Text(
-                          widget.budget.consumed.toString() +
+                          budget.consumed.toString() +
                               ' ' +
                               settings.currency.symbol,
                           style: TextStyle(fontSize: 24),
@@ -141,7 +171,7 @@ class _ShowBudgetWidgetState extends State<ShowBudgetWidget> {
                           style: TextStyle(fontSize: 14, color: Colors.grey),
                         ),
                         Text(
-                          widget.budget.amount.toString() +
+                          budget.amount.toString() +
                               ' ' +
                               settings.currency.symbol,
                           style: TextStyle(fontSize: 24),
@@ -155,9 +185,7 @@ class _ShowBudgetWidgetState extends State<ShowBudgetWidget> {
           ),
           FutureBuilder(
               future: ChartService().getOperationsByCategory(
-                  widget.budget.category,
-                  widget.budget.range,
-                  widget.budget.amount),
+                  budget.category, budget.range, budget.amount),
               builder: (builder, snapshot) {
                 if (snapshot.hasData) {
                   return Container(
@@ -184,8 +212,8 @@ class _ShowBudgetWidgetState extends State<ShowBudgetWidget> {
                     ),
                     Divider(),
                     FutureBuilder(
-                        future: OperationsService().getByCategory(
-                            widget.budget.range, widget.budget.category),
+                        future: OperationsService()
+                            .getByCategory(budget.range, budget.category),
                         builder: (builder, snapshot) {
                           if (snapshot.hasData) {
                             List<ListTile> tiles = [];

@@ -5,15 +5,21 @@ import 'package:numus/constants/date.dart';
 import 'package:numus/entities/budget.dart';
 import 'package:numus/entities/category.dart';
 import 'package:numus/entities/category_type.dart';
+import 'package:numus/entities/settings.dart';
 import 'package:numus/services/BudgetService.dart';
 import 'package:numus/services/CategoryService.dart';
+import 'package:provider/provider.dart';
 
-class AddBudgetWidget extends StatefulWidget {
+class AddOrEditBudgetWidget extends StatefulWidget {
+  final Budget budget;
+
+  AddOrEditBudgetWidget({this.budget});
+
   @override
-  _AddBudgetWidgetState createState() => _AddBudgetWidgetState();
+  _AddOrEditBudgetWidgetState createState() => _AddOrEditBudgetWidgetState();
 }
 
-class _AddBudgetWidgetState extends State<AddBudgetWidget> {
+class _AddOrEditBudgetWidgetState extends State<AddOrEditBudgetWidget> {
   final _titleFormKey = GlobalKey<FormState>();
   final titleTextFieldController = TextEditingController();
 
@@ -21,9 +27,21 @@ class _AddBudgetWidgetState extends State<AddBudgetWidget> {
   final amountTextFieldController = TextEditingController();
   DateFormat dateFormatter;
   DateTimeRange range =
-      DateTimeRange(start: DateTime.now(), end: DateTime.now());
+  DateTimeRange(start: DateTime.now(), end: DateTime.now());
   BudgetType mode;
   Category category;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.budget != null) {
+      category = widget.budget.category;
+      mode = widget.budget.type;
+      range = widget.budget.range;
+      titleTextFieldController.text = widget.budget.title;
+      amountTextFieldController.text = widget.budget.amount.toString();
+    }
+  }
 
   void showDateRange() async {
     Navigator.pop(context);
@@ -49,7 +67,9 @@ class _AddBudgetWidgetState extends State<AddBudgetWidget> {
               ListTile(
                 leading: Icon(Icons.today),
                 title:
-                    Text(AppLocalizations.of(context).budgetAddEachMonthOption),
+                Text(AppLocalizations
+                    .of(context)
+                    .budgetAddEachMonthOption),
                 onTap: () {
                   setState(() {
                     mode = BudgetType.month;
@@ -59,7 +79,9 @@ class _AddBudgetWidgetState extends State<AddBudgetWidget> {
               ),
               ListTile(
                 leading: Icon(Icons.date_range),
-                title: Text(AppLocalizations.of(context).budgetAddCustomOption),
+                title: Text(AppLocalizations
+                    .of(context)
+                    .budgetAddCustomOption),
                 onTap: showDateRange,
               ),
             ],
@@ -80,7 +102,8 @@ class _AddBudgetWidgetState extends State<AddBudgetWidget> {
                 if (snapshot.hasData) {
                   children = snapshot.data
                       .map<Widget>(
-                        (Category category) => ListTile(
+                        (Category category) =>
+                        ListTile(
                           contentPadding: EdgeInsets.all(5),
                           leading: Container(
                             padding: EdgeInsets.all(7),
@@ -102,11 +125,12 @@ class _AddBudgetWidgetState extends State<AddBudgetWidget> {
                             });
                           },
                         ),
-                      )
+                  )
                       .toList();
                 } else {
                   children.add(ListTile(
-                    title: Text(AppLocalizations.of(context)
+                    title: Text(AppLocalizations
+                        .of(context)
                         .selectCategoryThereAreNoCategories),
                     onTap: () {},
                   ));
@@ -121,22 +145,44 @@ class _AddBudgetWidgetState extends State<AddBudgetWidget> {
         });
   }
 
-  saveBudget() async{
-    await BudgetService().createBudget(titleTextFieldController.text, category,
-        double.tryParse(amountTextFieldController.text),
-        mode,
-        start: mode == BudgetType.custom ? range.start : null,
-        end: mode == BudgetType.custom ? range.end : null);
-    Navigator.pop(context);
+  saveBudget(Settings settings) async {
+    if (widget.budget == null) {
+      await BudgetService().createBudget(
+          titleTextFieldController.text, category,
+          double.tryParse(amountTextFieldController.text), mode, settings,
+          start: mode == BudgetType.custom ? range.start : null,
+          end: mode == BudgetType.custom ? range.end : null);
+      Navigator.pop(context);
+    } else {
+      await BudgetService().editBudget(
+          widget.budget.id,
+          titleTextFieldController.text,
+          category,
+          double.tryParse(amountTextFieldController.text),
+          mode, settings,
+          start: mode == BudgetType.custom ? range.start : null,
+          end: mode == BudgetType.custom ? range.end : null);
+      Navigator.pop(context);
+      Navigator.pop(context);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     dateFormatter =
-        DateFormat(dateFormat, AppLocalizations.of(context).localeName);
+        DateFormat(dateFormat, AppLocalizations
+            .of(context)
+            .localeName);
+    Settings settings = Provider.of<Settings>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context).budgetAddScreenTitle),
+        title: widget.budget != null
+            ? Text(AppLocalizations
+            .of(context)
+            .budgetEditScreenTitle)
+            : Text(AppLocalizations
+            .of(context)
+            .budgetAddScreenTitle),
         actions: [
           IconButton(
               icon: Icon(Icons.done),
@@ -147,11 +193,14 @@ class _AddBudgetWidgetState extends State<AddBudgetWidget> {
                       behavior: SnackBarBehavior.floating,
                       action: SnackBarAction(
                         label:
-                            AppLocalizations.of(context).budgetAddErrorConfirm,
+                        AppLocalizations
+                            .of(context)
+                            .budgetAddErrorConfirm,
                         onPressed: () {},
                       ),
                       duration: Duration(seconds: 10),
-                      content: Text(AppLocalizations.of(context)
+                      content: Text(AppLocalizations
+                          .of(context)
                           .budgetAddChoseCategoryError),
                     ),
                   );
@@ -163,11 +212,14 @@ class _AddBudgetWidgetState extends State<AddBudgetWidget> {
                       behavior: SnackBarBehavior.floating,
                       action: SnackBarAction(
                         label:
-                            AppLocalizations.of(context).budgetAddErrorConfirm,
+                        AppLocalizations
+                            .of(context)
+                            .budgetAddErrorConfirm,
                         onPressed: () {},
                       ),
                       duration: Duration(seconds: 10),
-                      content: Text(AppLocalizations.of(context)
+                      content: Text(AppLocalizations
+                          .of(context)
                           .budgetAddChoseTimeframeError),
                     ),
                   );
@@ -175,7 +227,7 @@ class _AddBudgetWidgetState extends State<AddBudgetWidget> {
                 }
                 if (_titleFormKey.currentState.validate() &&
                     _amountFormKey.currentState.validate()) {
-                  saveBudget();
+                  saveBudget(settings);
                 }
               })
         ],
@@ -198,7 +250,8 @@ class _AddBudgetWidgetState extends State<AddBudgetWidget> {
                       controller: titleTextFieldController,
                       decoration: InputDecoration(
                         border: InputBorder.none,
-                        hintText: AppLocalizations.of(context)
+                        hintText: AppLocalizations
+                            .of(context)
                             .budgetAddNamePlaceholder,
                       ),
                       style: TextStyle(fontSize: 24),
@@ -209,7 +262,8 @@ class _AddBudgetWidgetState extends State<AddBudgetWidget> {
                       },
                       validator: (value) {
                         if (value.isEmpty) {
-                          return AppLocalizations.of(context)
+                          return AppLocalizations
+                              .of(context)
                               .budgetAddNameError;
                         }
                         return null;
@@ -221,37 +275,39 @@ class _AddBudgetWidgetState extends State<AddBudgetWidget> {
               Divider(),
               category == null
                   ? ListTile(
-                      leading: Container(
-                        child: Icon(
-                          Icons.help_outline,
-                          size: 34,
-                        ),
-                      ),
-                      title: Text(
-                        AppLocalizations.of(context).budgetAddChoseCategory,
-                        style: TextStyle(fontSize: 24),
-                      ),
-                      onTap: showCategoryOptions,
-                    )
+                leading: Container(
+                  child: Icon(
+                    Icons.help_outline,
+                    size: 34,
+                  ),
+                ),
+                title: Text(
+                  AppLocalizations
+                      .of(context)
+                      .budgetAddChoseCategory,
+                  style: TextStyle(fontSize: 24),
+                ),
+                onTap: showCategoryOptions,
+              )
                   : ListTile(
-                      // contentPadding: EdgeInsets.all(0),
-                      leading: Container(
-                        padding: EdgeInsets.all(7),
-                        decoration: BoxDecoration(
-                            color: Color(category.color),
-                            shape: BoxShape.circle),
-                        child: Icon(
-                          IconData(category.icon, fontFamily: 'MaterialIcons'),
-                          color: Colors.white,
-                          size: 24,
-                        ),
-                      ),
-                      title: Text(
-                        category.name,
-                        style: TextStyle(fontSize: 24),
-                      ),
-                      onTap: showCategoryOptions,
-                    ),
+                // contentPadding: EdgeInsets.all(0),
+                leading: Container(
+                  padding: EdgeInsets.all(7),
+                  decoration: BoxDecoration(
+                      color: Color(category.color),
+                      shape: BoxShape.circle),
+                  child: Icon(
+                    IconData(category.icon, fontFamily: 'MaterialIcons'),
+                    color: Colors.white,
+                    size: 24,
+                  ),
+                ),
+                title: Text(
+                  category.name,
+                  style: TextStyle(fontSize: 24),
+                ),
+                onTap: showCategoryOptions,
+              ),
               Divider(),
               ListTile(
                 leading: Icon(
@@ -267,7 +323,8 @@ class _AddBudgetWidgetState extends State<AddBudgetWidget> {
                       controller: amountTextFieldController,
                       decoration: InputDecoration(
                         border: InputBorder.none,
-                        hintText: AppLocalizations.of(context)
+                        hintText: AppLocalizations
+                            .of(context)
                             .budgetAddAmountPlaceholder,
                       ),
                       style: TextStyle(fontSize: 24),
@@ -278,11 +335,13 @@ class _AddBudgetWidgetState extends State<AddBudgetWidget> {
                       },
                       validator: (value) {
                         if (value.isEmpty) {
-                          return AppLocalizations.of(context)
+                          return AppLocalizations
+                              .of(context)
                               .budgetAddAmountError;
                         }
                         if (double.tryParse(value) == null) {
-                          return AppLocalizations.of(context)
+                          return AppLocalizations
+                              .of(context)
                               .budgetAddAmountNotNumericError;
                         }
                         return null;
@@ -301,13 +360,16 @@ class _AddBudgetWidgetState extends State<AddBudgetWidget> {
                 ),
                 title: Text(
                   mode == null
-                      ? AppLocalizations.of(context).budgetAddChoseTimeframe
+                      ? AppLocalizations
+                      .of(context)
+                      .budgetAddChoseTimeframe
                       : (mode == BudgetType.custom
-                          ? dateFormatter.format(range.start) +
-                              ' - ' +
-                              dateFormatter.format(range.end)
-                          : AppLocalizations.of(context)
-                              .budgetAddEachMonthOption),
+                      ? dateFormatter.format(range.start) +
+                      ' - ' +
+                      dateFormatter.format(range.end)
+                      : AppLocalizations
+                      .of(context)
+                      .budgetAddEachMonthOption),
                   style: TextStyle(fontSize: 24),
                 ),
                 onTap: showTimeframeOptions,

@@ -6,7 +6,7 @@ import 'package:numus/entities/budget.dart';
 import 'package:numus/entities/settings.dart';
 import 'package:numus/services/BudgetService.dart';
 import 'package:numus/services/OperationsService.dart';
-import 'package:numus/ui/budgets/add_budget.dart';
+import 'package:numus/ui/budgets/add_or_edit_budget.dart';
 import 'package:numus/ui/budgets/show_budget.dart';
 import 'package:provider/provider.dart';
 
@@ -30,7 +30,7 @@ class _BudgetsHomeWidgetState extends State<BudgetsHomeWidget> {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           await Navigator.push(context,
-              MaterialPageRoute(builder: (context) => AddBudgetWidget()));
+              MaterialPageRoute(builder: (context) => AddOrEditBudgetWidget()));
           setState(() {});
         },
         child: Icon(Icons.add),
@@ -45,6 +45,12 @@ class BudgetListWidget extends StatefulWidget {
 }
 
 class _BudgetListWidgetState extends State<BudgetListWidget> {
+  onTap(Budget budget) async {
+    await Navigator.push(context,
+        MaterialPageRoute(builder: (context) => ShowBudgetWidget(budget)));
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     Settings settings = Provider.of<Settings>(context);
@@ -54,7 +60,9 @@ class _BudgetListWidgetState extends State<BudgetListWidget> {
           if (snapshot.hasData) {
             List<BudgetCardWidget> budgets = [];
             for (var budget in snapshot.data) {
-              budgets.add(BudgetCardWidget(budget));
+              budgets.add(BudgetCardWidget(budget, () {
+                onTap(budget);
+              }));
             }
             if (budgets.isNotEmpty) {
               return ListView(
@@ -72,7 +80,11 @@ class EmptyBudgetsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Text("You don't have any budgets set up. Please create one."),
+      child: Text(AppLocalizations.of(context).budgetHomEmptyMessage,
+        textAlign: TextAlign.center,
+        style: TextStyle(
+        fontSize: 20,
+      ),),
     );
   }
 }
@@ -80,10 +92,9 @@ class EmptyBudgetsWidget extends StatelessWidget {
 class BudgetCardWidget extends StatelessWidget {
   final Budget budget;
   final DateFormat formatter = DateFormat(monthDayFormat);
+  final Function onTap;
 
-  BudgetCardWidget(this.budget);
-
-
+  BudgetCardWidget(this.budget, this.onTap);
 
   getConsumedText(Settings settings, double budgeted, double consumed) {
     return consumed.toString() +
@@ -99,10 +110,7 @@ class BudgetCardWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     Settings settings = Provider.of<Settings>(context);
     return GestureDetector(
-      onTap: () {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => ShowBudgetWidget(budget)));
-      },
+      onTap: onTap,
       child: Card(
         child: Container(
             width: double.infinity,
@@ -159,8 +167,8 @@ class BudgetCardWidget extends StatelessWidget {
                       height: 63,
                       margin: EdgeInsets.only(bottom: 10),
                       padding: EdgeInsets.all(0),
-                      child: BudgetPieChartWidget(
-                          budget.amount, budget.consumed),
+                      child:
+                          BudgetPieChartWidget(budget.amount, budget.consumed),
                     ),
                     Container(
                         child: Text(getConsumedText(

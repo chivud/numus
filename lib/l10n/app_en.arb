@@ -63,6 +63,7 @@
   "languagePickerSelect": "Select your language",
   "languageSearch": "search",
   "budgetHomeMuItem": "Budgets",
+  "budgetHomEmptyMessage": "You don't have any budgets set up.\nPlease create one.",
   "budgetScreenTitle": "Budget tracking",
   "budgetAddScreenTitle": "Add budget for a category",
   "budgetAddNamePlaceholder": "Budget title...",
@@ -81,5 +82,9 @@
   "budgetShowOverBudget": "OVER\nBUDGET",
   "budgetShowConsumed": "Consumed",
   "budgetShowBudgeted": "Budgeted",
-  "budgetShowTimelineTitle": "Budget timeline"
+  "budgetShowTimelineTitle": "Budget timeline",
+  "budgetShowConfirmDelete": "Confirm",
+  "budgetShowConfirmCancel": "Cancel",
+  "budgetShowConfirmText": "Are you sure do you want to delete this budget?",
+  "budgetEditScreenTitle": "Edit budget"
 }

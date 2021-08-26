@@ -9,8 +9,8 @@ import 'package:sqflite/sqflite.dart';
 import 'DatabaseProvider.dart';
 
 class BudgetService {
-  Future<void> createBudget(
-      String title, Category category, double amount, BudgetType type,
+  Future<void> createBudget(String title, Category category, double amount,
+      BudgetType type, Settings settings,
       {DateTime start, DateTime end}) async {
     Budget budget = Budget(
         title: title,
@@ -19,7 +19,8 @@ class BudgetService {
         type: type,
         start: start != null ? start.millisecondsSinceEpoch : null,
         end: end != null ? end.millisecondsSinceEpoch : null,
-        createdAt: DateTime.now().millisecondsSinceEpoch);
+        createdAt: DateTime.now().millisecondsSinceEpoch,
+        settings: settings);
     Database db = await DatabaseProvider().database;
     return await db.insert('budgets', budget.toMap());
   }
@@ -45,6 +46,7 @@ class BudgetService {
     OperationsService opService = OperationsService();
     for (var element in result) {
       Budget budget = Budget(
+          id: element['id'],
           title: element['title'],
           category: Category(
               id: element['category_id'],
@@ -68,5 +70,26 @@ class BudgetService {
       budgets.add(budget);
     }
     return budgets;
+  }
+
+  Future<void> delete(int id) async {
+    Database db = await DatabaseProvider().database;
+    await db.delete('budgets', where: "id = ?", whereArgs: [id]);
+  }
+
+  Future<void> editBudget(int id, String title, Category category, double amount,
+      BudgetType type, Settings settings,
+      {DateTime start, DateTime end}) async {
+    Budget budget = Budget(
+        title: title,
+        category: category,
+        amount: amount,
+        type: type,
+        start: start != null ? start.millisecondsSinceEpoch : null,
+        end: end != null ? end.millisecondsSinceEpoch : null,
+        createdAt: DateTime.now().millisecondsSinceEpoch,
+        settings: settings);
+    Database db = await DatabaseProvider().database;
+    return await db.update('budgets', budget.toMap(), where: "id = ?", whereArgs: [id]);
   }
 }
