@@ -2,7 +2,6 @@ import 'package:numus/entities/budget.dart';
 import 'package:numus/entities/category.dart';
 import 'package:numus/entities/category_type.dart';
 import 'package:numus/entities/settings.dart';
-import 'package:numus/services/CategoryService.dart';
 import 'package:numus/services/OperationsService.dart';
 import 'package:sqflite/sqflite.dart';
 

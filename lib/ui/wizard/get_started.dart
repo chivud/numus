@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:numus/constants/currencies.dart';
-import 'package:numus/constants/languages.dart';
-import 'package:numus/ui/wizard/currency_picker.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:numus/constants/languages.dart';
 import 'package:numus/ui/wizard/language_picker.dart';
 
 class GetStartedWidget extends StatelessWidget {

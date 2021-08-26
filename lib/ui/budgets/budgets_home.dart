@@ -5,7 +5,6 @@ import 'package:numus/constants/date.dart';
 import 'package:numus/entities/budget.dart';
 import 'package:numus/entities/settings.dart';
 import 'package:numus/services/BudgetService.dart';
-import 'package:numus/services/OperationsService.dart';
 import 'package:numus/ui/budgets/add_or_edit_budget.dart';
 import 'package:numus/ui/budgets/show_budget.dart';
 import 'package:provider/provider.dart';
