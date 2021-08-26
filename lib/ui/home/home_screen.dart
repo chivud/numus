@@ -10,6 +10,7 @@ import 'package:numus/ui/settings/settings.dart';
 import 'package:numus/ui/transactions/select_category.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomeScreen extends StatefulWidget {
   final bool cameFromAddAmount;
@@ -65,106 +66,95 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: SizedBox(
         height: 65,
         width: 65,
-        child: FloatingActionButton(
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => SelectCategoryWidget()));
-            },
-            child: Icon(Icons.add)),
+        child: Container(
+          child: FloatingActionButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => SelectCategoryWidget()));
+              },
+              child: Icon(Icons.add)),
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(left: 20),
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                            shape: CircleBorder(),
-                            padding: EdgeInsets.all(10),
-                            primary: Colors.black),
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ChartsWidget()));
-                        },
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(Icons.pie_chart),
-                            Text(AppLocalizations.of(context).homeCharts)
-                          ],
-                        ),
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(left: 20),
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                            shape: CircleBorder(),
-                            padding: EdgeInsets.all(10),
-                            primary: Colors.black),
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => BudgetsHomeWidget()));
-                        },
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(Icons.fact_check),
-                            Text(AppLocalizations.of(context).budgetHomeMuItem)
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                )
-              ],
+            TextButton(
+              style: TextButton.styleFrom(
+                  shape: CircleBorder(),
+                  padding: EdgeInsets.all(10),
+                  primary: Colors.black),
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => ChartsWidget()));
+              },
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.pie_chart),
+                  Text(AppLocalizations.of(context).homeCharts)
+                ],
+              ),
             ),
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(right: 20),
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                            shape: CircleBorder(),
-                            padding: EdgeInsets.all(10),
-                            primary: Colors.black),
-                        onPressed: () async {
-                          await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => SettingsWidget()));
-                          setState(() {});
-                        },
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(Icons.settings),
-                            Text(AppLocalizations.of(context).homeSettings),
-                          ],
-                        ),
-                      ),
-                    )
-                  ],
-                )
-              ],
+            TextButton(
+              style: TextButton.styleFrom(
+                  shape: CircleBorder(),
+                  padding: EdgeInsets.only(left: 10, right: 30, top: 10, bottom: 10),
+                  primary: Colors.black),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => BudgetsHomeWidget()));
+              },
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.fact_check),
+                  Text(AppLocalizations.of(context).budgetHomeMuItem)
+                ],
+              ),
+            ),
+            TextButton(
+              onPressed: () async {
+                if (await canLaunch(mailToUrl)) {
+                await launch(mailToUrl);
+                }
+              },
+              style: TextButton.styleFrom(
+                  shape: CircleBorder(),
+                  padding: EdgeInsets.only(left: 30, right: 10, top: 10, bottom: 10),
+                  primary: Colors.black),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.feedback),
+                  Text('Feedback'),
+                ],
+              ),
+            ),
+            TextButton(
+              style: TextButton.styleFrom(
+                  shape: CircleBorder(),
+                  padding: EdgeInsets.all(10),
+                  primary: Colors.black),
+              onPressed: () async {
+                await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => SettingsWidget()));
+                setState(() {});
+              },
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.settings),
+                  Text(AppLocalizations.of(context).homeSettings),
+                ],
+              ),
             ),
           ],
         ),
